@@ -142,7 +142,7 @@ export default function Home() {
         }}
       >
         <CardContent className="flex flex-1 flex-row gap-2 w-full">
-          <div className="flex flex-1 flex-col items-center gap-1 p-1 w-full">
+          <div className="flex flex-1 flex-col items-center gap-1 p-1 w-full text-fuchsia-500">
               <House />
               <h4 className="flex font-semibold text-sm">Home</h4>
           </div>
