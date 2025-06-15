@@ -1,103 +1,130 @@
-import Image from "next/image";
+import { Card, CardContent } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { House, Link, Repeat, TreePalm, LayoutDashboard, Send, Download, History, Wallet } from "lucide-react"
 
 export default function Home() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <main className="relative flex flex-col w-screen h-screen bg-background gap-6">
+      <div className="flex flex-1 w-full">
+        <Card className="flex w-full rounded-b-4xl rounded-t-none" style={{
+          background: 'linear-gradient(132deg, rgba(2, 0, 36, 1) 0%, rgba(7, 7, 135, 1) 27%, rgba(143, 0, 209, 1) 72%)',
+          boxShadow: '0 1px 20px rgba(61, 62, 213, 0.8)'
+        }}>
+          <CardContent className="flex flex-1 flex-col gap-2 p-2">
+            <div className="flex h-[30%] flex-row gap-2 w-full">
+              <div className="flex w-[25%] p-2">
+                <Avatar className="w-18 h-18">
+                  <AvatarImage src="https://github.com/shadcn.png" />
+                  <AvatarFallback>RR</AvatarFallback>
+                </Avatar>
+              </div>
+              <div className="flex w-[65%] items-center">
+                <h2 className="flex font-bold text-xl">
+                  Hi!, Raymond
+                </h2> 
+              </div>
+              <div className="flex w-[10%] p-2 justify-end">
+                 <LayoutDashboard />
+              </div>
+            </div>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+            <div className="flex h-[50%] flex-row px-2 gap-2 w-full">
+              <div className="flex flex-1 flex-col gap-2 justify-center">
+                <h6 className="flex font-base text-xs">
+                  0X725212......68876
+                </h6> 
+                <Badge variant="default">Badge</Badge>
+                 <h2 className="flex font-bold text-4xl">
+                  $8,876,300.00
+                </h2> 
+              </div>
+            </div>
+
+            <div className="flex h-[20%] flex-row justify-center w-full">
+              <div className="flex flex-col p-2 gap-2 items-center justify-center">
+                <Card className="flex w-18 h-18 rounded-3xl">
+                  <CardContent className="flex gap-1 items-center">
+                    <Send />
+                  </CardContent>
+                </Card>
+                <h4 className="flex font-semibold text-xs">Transfer</h4>
+              </div>
+              <div className="flex flex-col p-2 gap-2 items-center justify-center">
+                <Card className="flex w-18 h-18 rounded-3xl">
+                  <CardContent className="flex gap-1 items-center">
+                    <Download />
+                  </CardContent>
+                </Card>
+                <h4 className="flex font-semibold text-xs">Receive</h4>
+              </div>
+              <div className="flex flex-col p-2 gap-2 items-center justify-center">
+                <Card className="flex w-18 h-18 rounded-3xl">
+                  <CardContent className="flex gap-1 items-center">
+                    <History />
+                  </CardContent>
+                </Card>
+                <h4 className="flex font-semibold text-xs">History</h4>
+              </div>
+              <div className="flex flex-col p-2 gap-2 items-center justify-center">
+                <Card className="flex w-18 h-18 rounded-3xl">
+                  <CardContent className="flex gap-1 items-center">
+                    <Wallet />
+                  </CardContent>
+                </Card>
+                <h4 className="flex font-semibold text-xs">Wallet</h4>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      <div className="flex flex-1 flex-col gap-3 px-2 w-full">
+        <h1 className="flex ml-2 font-semibold text-xl">
+          Portfolio
+        </h1>
+        <Card className="flex w-full h-14 justify-center">
+          <CardContent>
+            <p>Card Content</p>
+          </CardContent>
+        </Card>
+        <Card className="flex w-full h-14 justify-center">
+          <CardContent>
+            <p>Card Content</p>
+          </CardContent>
+        </Card>
+        <Card className="flex w-full h-14 justify-center">
+          <CardContent>
+            <p>Card Content</p>
+          </CardContent>
+        </Card>
+      </div>
+      <div className="absolute bottom-1 flex w-full h-2/14">
+        <Card className="flex w-full rounded-t-4xl rounded-b-none"
+          style={{
+            boxShadow: '0 -2px 30px -5px rgba(61, 62, 213, 0.8)'
+          }}
         >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+          <CardContent className="flex flex-1 flex-row gap-2 w-full">
+            <div className="flex flex-1 flex-col items-center gap-1 p-1 w-full">
+                <House />
+                <h4 className="flex font-semibold text-sm">Home</h4>
+            </div>
+            <div className="flex flex-1 flex-col items-center gap-1 p-1 w-full">
+                <Link />
+                <h4 className="flex font-semibold text-sm">Bridge</h4>
+            </div>
+            <div className="flex flex-1 flex-col items-center gap-1 p-1 w-full">
+                <Repeat />
+                <h4 className="flex font-semibold text-sm">Swap</h4>
+            </div>
+            <div className="flex flex-1 flex-col items-center gap-1 p-1 w-full">
+                <TreePalm />
+                <h4 className="flex font-semibold text-sm">Stake</h4>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    </main>
   );
 }
