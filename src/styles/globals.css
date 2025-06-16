@@ -87,6 +87,38 @@
   }
 }
 
+@layer utilities {
+  .animate-fadeIn {
+    animation: fadeIn 0.5s ease-in-out forwards;
+  }
+  .animate-spin {
+    animation: spin 1s linear infinite;
+  }
+  .fade-out {
+    opacity: 0;
+    transition: opacity 0.5s ease-out;
+  }
+  .content-fade-in {
+    opacity: 0;
+    animation: fadeIn 0.7s ease-in-out forwards;
+    animation-delay: 0.3s;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+body {
+  overflow: hidden; 
+}
+
 .no-scrollbar::-webkit-scrollbar {
     display: none;
     width: 0;
