@@ -27,12 +27,12 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="relative flex flex-col w-screen h-screen">
+    <div className="relative flex flex-col w-full h-screen">
       {showSplash && (
         <SplashScreen className={fadeSplash ? "fade-out" : ""} />
       )}
       {!showSplash && (
-        <div className="flex flex-col w-screen h-screen content-fade-in">
+        <div className="flex flex-col w-full h-screen content-fade-in">
           <div className="flex flex-1 w-full">
             <HeroSection />
           </div>
