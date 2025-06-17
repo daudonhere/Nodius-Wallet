@@ -14,12 +14,12 @@ export function BottomNavigation() {
             <h4 className="flex font-semibold text-sm">Home</h4>
         </div>
         <div className="flex flex-1 flex-col items-center gap-1 p-1 w-full">
-            <Link />
-            <h4 className="flex font-semibold text-sm">Bridge</h4>
-        </div>
-        <div className="flex flex-1 flex-col items-center gap-1 p-1 w-full">
             <Repeat />
             <h4 className="flex font-semibold text-sm">Swap</h4>
+        </div>
+        <div className="flex flex-1 flex-col items-center gap-1 p-1 w-full">
+            <Link />
+            <h4 className="flex font-semibold text-sm">Bridge</h4>
         </div>
         <div className="flex flex-1 flex-col items-center gap-1 p-1 w-full">
             <TreePalm />
