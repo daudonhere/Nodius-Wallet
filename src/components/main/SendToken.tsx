@@ -1,6 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { Send, ScanLine, Star } from "lucide-react";
-import { Drawer,  DrawerHeader, DrawerTitle, DrawerDescription, DrawerContent, DrawerTrigger } from "@/components/ui/drawer"
+import { Send, Star } from "lucide-react";
+import { Drawer,  DrawerHeader, DrawerTitle, DrawerContent, DrawerTrigger } from "@/components/ui/drawer"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -18,8 +18,7 @@ export function SendToken({ className }: { className?: string }) {
       </DrawerTrigger>
       <DrawerContent className="flex flex-col gap-2 w-full h-full">
         <DrawerHeader>
-          <DrawerTitle>TRANSFER TOKEN</DrawerTitle>
-          <DrawerDescription>Lorem ipsum dollor sit ammet</DrawerDescription>
+          <DrawerTitle>Transfer Token</DrawerTitle>
         </DrawerHeader>
         <div className="flex flex-row gap-2 px-4 w-full">
           <div className="flex w-[75%] h-full">
@@ -34,7 +33,7 @@ export function SendToken({ className }: { className?: string }) {
               className="flex w-full"
               variant="outline"
             >
-              Send <Send />
+              Send
             </Button>
           </div>
         </div>
@@ -43,7 +42,7 @@ export function SendToken({ className }: { className?: string }) {
               className="flex w-1/4"
               variant="outline"
             >
-              Scan <ScanLine />
+              Scan
             </Button>
         </div>
         <div className="flex flex-row justify-start px-4 w-full">
@@ -68,7 +67,7 @@ export function SendToken({ className }: { className?: string }) {
                     </h2>
                   </div>
                   <div className="flex flex-1 justify-start">
-                    <h6 className="flex font-semibold text-xs">
+                    <h6 className="flex text-xs">
                       0X87824783..234212
                     </h6>
                   </div>

@@ -1,6 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { History, Upload, Download } from "lucide-react";
-import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer"
+import { Drawer, DrawerHeader, DrawerTitle, DrawerContent, DrawerTrigger } from "@/components/ui/drawer"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -16,17 +16,27 @@ export function TransactionHistory({ className }: { className?: string }) {
             </CardContent>
         </Card>
       </DrawerTrigger>
-      <DrawerContent className="flex flex-col w-full h-full">
-          <div className="flex flex-row gap-2 px-4 py-8 w-full h-[15%]">
-            <div className="flex w-[75%] h-full">
-              <Input type="email" placeholder="Transactions" />
-            </div>
-            <div className="flex w-[25%] h-full">
-              <Button variant="outline">
-                Search
-              </Button>
-            </div>
+      <DrawerContent className="flex flex-col gap-2 w-full h-full">
+        <DrawerHeader>
+          <DrawerTitle>Transaction History</DrawerTitle>
+        </DrawerHeader>
+        <div className="flex flex-row gap-2 px-4 w-full">
+          <div className="flex w-[75%] h-full">
+            <Input
+              className="flex w-full"
+              type="text" 
+              placeholder="Contact or Address" 
+            />
           </div>
+          <div className="flex w-[25%] h-full">
+            <Button
+              className="flex w-full"
+              variant="outline"
+            >
+              Search
+            </Button>
+          </div>
+        </div>
           <div className="flex flex-col gap-2 py-2 px-4 w-full h-[75%] overflow-y-scroll no-scrollbar">
             <Card className="flex w-full h-16 justify-center">
               <CardContent className="flex flex-row flex-1 gap-1 py-1 px-4">
@@ -44,7 +54,7 @@ export function TransactionHistory({ className }: { className?: string }) {
                       </h2>
                     </div>
                     <div className="flex flex-1 justify-start">
-                      <h6 className="flex font-semibold text-xs">
+                      <h6 className="flex text-xs">
                         0X87824783..234212
                       </h6>
                     </div>
