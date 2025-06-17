@@ -4,14 +4,15 @@ import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { cn } from "@/libs/utils";
 
-export function TransactionHistory() {
+export function TransactionHistory({ className }: { className?: string }) {
   return (
     <Drawer>
       <DrawerTrigger asChild>
         <Card className="flex w-18 h-18 rounded-3xl">
             <CardContent className="flex gap-1 items-center">
-              <History />
+              <History className={cn("transition-colors", className)} />
             </CardContent>
         </Card>
       </DrawerTrigger>

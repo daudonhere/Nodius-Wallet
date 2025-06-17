@@ -4,16 +4,15 @@ import { Drawer,  DrawerHeader, DrawerTitle, DrawerDescription, DrawerContent, D
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { cn } from "@/libs/utils";
 
-export function ReceiveToken() {}
-
-export function SendToken() {
+export function SendToken({ className }: { className?: string }) {
   return (
     <Drawer>
       <DrawerTrigger asChild>
         <Card className="flex w-18 h-18 rounded-3xl">
             <CardContent className="flex gap-1 items-center">
-              <Send />
+              <Send className={cn("transition-colors", className)} />
             </CardContent>
         </Card>
       </DrawerTrigger>
@@ -26,8 +25,8 @@ export function SendToken() {
           <div className="flex w-[75%] h-full">
             <Input
               className="flex w-full"
-              type="email" 
-              placeholder="Wallet Address" 
+              type="text" 
+              placeholder="Contact or Address" 
             />
           </div>
           <div className="flex w-[25%] h-full">
