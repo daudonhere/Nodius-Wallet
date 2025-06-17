@@ -1,11 +1,11 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { Wallet } from "lucide-react";
+import { Repeat } from "lucide-react";
 
-export function ConnectWallet() {
+export function SwapToken() {
   return (
     <Card className="flex w-18 h-18 rounded-3xl">
         <CardContent className="flex gap-1 items-center">
-        <Wallet />
+          <Repeat />
         </CardContent>
     </Card>
   );
