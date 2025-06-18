@@ -1,30 +1,68 @@
+'use client';
+
 import { Card, CardContent } from "@/components/ui/card";
 import { House, Contact, TreePalm, ChartCandlestick } from "lucide-react";
+import { useRouter, usePathname } from 'next/navigation';
+import { useTransition, useEffect, useRef } from 'react';
+import { cn } from "@/libs/utils";
+import { useNavigationStore } from '@/stores/navigationStore';
 
 export function BottomNavigation() {
+  const router = useRouter();
+  const pathname = usePathname();
+  const { showLoader, hideLoader } = useNavigationStore();
+  const [isPending, startTransition] = useTransition();
+  const isInitialRender = useRef(true);
+
+  useEffect(() => {
+    if (isInitialRender.current) {
+      isInitialRender.current = false;
+      return;
+    }
+
+    if (isPending) {
+      showLoader();
+    } else {
+      hideLoader();
+    }
+  }, [isPending, showLoader, hideLoader]);
+
+  const navItems = [
+    { href: '/dashboard', icon: House, label: 'Home' },
+    { href: '/contact', icon: Contact, label: 'Contact' },
+    { href: '/stake', icon: TreePalm, label: 'Stake' },
+    { href: '/market', icon: ChartCandlestick, label: 'Market' },
+  ];
+
+  const handleNavigation = (path: string) => {
+    if (pathname === path) return;
+    
+    startTransition(() => {
+      router.push(path);
+    });
+  };
+
   return (
-    <Card className="absolute bottom-0 flex w-full h-2/14 rounded-t-4xl rounded-b-none z-20"
-      style={{
-        boxShadow: '0 -2px 30px -5px rgba(61, 62, 213, 0.8)'
-      }}
+    <Card 
+      className="absolute bottom-0 flex w-full h-2/14 rounded-t-4xl rounded-b-none z-20"
+      style={{ boxShadow: '0 -2px 30px -5px rgba(61, 62, 213, 0.8)' }}
     >
       <CardContent className="flex flex-1 flex-row gap-2 w-full justify-center">
-        <div className="flex flex-1 flex-col items-center gap-1 p-1 w-full text-fuchsia-500">
-            <House />
-            <h4 className="flex font-semibold text-sm">Home</h4>
-        </div>
-        <div className="flex flex-1 flex-col items-center gap-1 p-1 w-full">
-            <Contact />
-            <h4 className="flex font-semibold text-sm">Contact</h4>
-        </div>
-        <div className="flex flex-1 flex-col items-center gap-1 p-1 w-full">
-            <TreePalm />
-            <h4 className="flex font-semibold text-sm">Stake</h4>
-        </div>
-        <div className="flex flex-1 flex-col items-center gap-1 p-1 w-full">
-            <ChartCandlestick />
-            <h4 className="flex font-semibold text-sm">Market</h4>
-        </div>
+        {navItems.map((item) => {
+          const isActive = pathname === item.href;
+          return (
+            <div
+              key={item.href}
+              onClick={() => handleNavigation(item.href)}
+              className="group flex flex-1 flex-col items-center justify-center gap-1 p-1 w-full cursor-pointer transition-transform duration-75 active:scale-95"
+            >
+              <item.icon className={cn("transition-colors", isActive ? "text-fuchsia-500" : "group-hover:text-fuchsia-500")}/>
+              <h4 className={cn("flex font-semibold text-sm transition-colors", isActive ? "text-fuchsia-500" : "group-hover:text-fuchsia-500")}>
+                {item.label}
+              </h4>
+            </div>
+          );
+        })}
       </CardContent>
     </Card>
   );

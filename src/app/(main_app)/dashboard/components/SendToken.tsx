@@ -20,37 +20,27 @@ export function SendToken({ className }: { className?: string }) {
         <DrawerHeader>
           <DrawerTitle>Transfer Token</DrawerTitle>
         </DrawerHeader>
-        <div className="flex flex-row gap-2 px-4 w-full">
-          <div className="flex w-[75%] h-full">
-            <Input
-              className="flex w-full"
-              type="text" 
-              placeholder="Contact or Address" 
-            />
-          </div>
-          <div className="flex w-[25%] h-full">
-            <Button
-              className="flex w-full"
-              variant="outline"
-            >
-              Send
-            </Button>
-          </div>
+        <div className="flex flex-row justify-center px-4 w-full">
+          <Input
+            className="flex w-full"
+            type="text" 
+            placeholder="Contact or Address" 
+          />
         </div>
-        <div className="flex flex-row justify-end gap-2 px-4 w-full">
+        <div className="flex flex-row justify-center px-4 w-full">
             <Button
-              className="flex w-1/4"
+              className="flex w-full"
               variant="outline"
             >
               Scan
             </Button>
         </div>
-        <div className="flex flex-row justify-start px-4 w-full">
+        <div className="flex flex-row justify-start mt-2 px-4 w-full">
           <h2 className="flex font-bold text-lg ml-1">
             Favorite Transaction
           </h2>
         </div>
-        <div className="flex flex-col gap-2 py-2 px-4 w-full h-[75%] overflow-y-scroll no-scrollbar">
+        <div className="flex flex-col gap-2 py-1 px-4 w-full h-[75%] overflow-y-scroll no-scrollbar">
           <Card className="flex w-full h-16 justify-center">
             <CardContent className="flex flex-row flex-1 gap-1 py-1 px-4">
               <div className="flex flex-row flex-1 items-center gap-2">

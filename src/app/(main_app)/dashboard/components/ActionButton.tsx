@@ -1,7 +1,7 @@
-import { SendToken } from "@/app/dashboard/components/SendToken";
-import { ReceiveToken } from "@/app/dashboard/components/ReceiveToken";
-import { TransactionHistory } from "@/app/dashboard/components/TransactionHistory";
-import { SwapToken } from "@/app/dashboard/components/SwapToken";
+import { SendToken } from "@/app/(main_app)/dashboard/components/SendToken";
+import { ReceiveToken } from "@/app/(main_app)/dashboard/components/ReceiveToken";
+import { TransactionHistory } from "@/app/(main_app)/dashboard/components/TransactionHistory";
+import { SwapToken } from "@/app/(main_app)/dashboard/components/SwapToken";
 
 export function ActionButton() {
   return (
