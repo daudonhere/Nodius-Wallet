@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Contact",
-  description: "Nodius Defi Contact",
+  title: "Market",
+  description: "Nodius Defi Market",
 };
 
-export default function MarketplaceLayout({
+export default function MarketLayout({
   children,
 }: {
   children: React.ReactNode;
