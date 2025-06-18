@@ -4,7 +4,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export function TokenList() {
   return (
-    <div className="flex flex-1 flex-col gap-2 p-4 px-4 w-full overflow-y-scroll no-scrollbar z-10">
+    <div className="flex flex-1 flex-col gap-3 p-4 px-4 w-full overflow-y-scroll no-scrollbar z-10">
       <Card className="flex w-full h-16 justify-center">
         <CardContent className="flex flex-row flex-1 gap-1 py-1 px-4">
           <div className="flex flex-row flex-1 items-center gap-2">

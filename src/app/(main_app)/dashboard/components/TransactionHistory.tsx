@@ -26,7 +26,7 @@ export function TransactionHistory({ className }: { className?: string }) {
             placeholder="Contact or Address" 
           />
         </div>
-        <div className="flex flex-col gap-2 py-2 px-4 w-full h-[75%] overflow-y-scroll no-scrollbar">
+        <div className="flex flex-col gap-3 py-2 px-4 w-full h-[75%] overflow-y-scroll no-scrollbar">
           <Card className="flex w-full h-16 justify-center">
             <CardContent className="flex flex-row flex-1 gap-1 py-1 px-4">
               <div className="flex flex-row flex-1 items-center gap-2">

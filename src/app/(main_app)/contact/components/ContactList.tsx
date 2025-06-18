@@ -13,7 +13,7 @@ export function ContactList() {
           placeholder="Contact or Address" 
         />
       </div>
-      <div className="flex flex-col gap-2 py-2 px-4 w-full h-[75%] overflow-y-scroll no-scrollbar">
+      <div className="flex flex-col gap-3 py-2 px-4 w-full h-[75%] overflow-y-scroll no-scrollbar">
         <Card className="flex w-full h-16 justify-center">
           <CardContent className="flex flex-row flex-1 gap-1 py-1 px-4">
             <div className="flex flex-row flex-1 items-center gap-2">
@@ -30,15 +30,19 @@ export function ContactList() {
                   </h2>
                 </div>
                 <div className="flex flex-1 justify-start">
-                  <h6 className="flex text-xs">
+                  <h6 className="flex text-xs text-primary">
                     0X87824783..234212
                   </h6>
                 </div>
               </div>
             </div>
-            <div className="flex flex-1 flex-row gap-4 items-center text-white justify-end">
-              <Download size={18} />
-              <Send size={18} />
+            <div className="flex flex-1 flex-row gap-2 items-center text-primary justify-end">
+              <div className="group flex p-3 bg-secondary rounded-full border border-fuchsia-500 cursor-pointer transition-transform duration-75 active:scale-95">
+                <Download size={18} className="group-hover:text-fuchsia-500"/>
+              </div>
+              <div className="group flex p-3 bg-secondary rounded-full border border-fuchsia-500 cursor-pointer transition-transform duration-75 active:scale-95">
+                <Send size={18} className="group-hover:text-fuchsia-500"/>
+              </div>
             </div>
           </CardContent>
         </Card>
@@ -58,15 +62,19 @@ export function ContactList() {
                   </h2>
                 </div>
                 <div className="flex flex-1 justify-start">
-                  <h6 className="flex text-xs">
+                  <h6 className="flex text-xs text-primary">
                     0X87824783..234212
                   </h6>
                 </div>
               </div>
             </div>
-            <div className="flex flex-1 flex-row gap-4 items-center text-white justify-end">
-              <Download size={18} />
-              <Send size={18} />
+            <div className="flex flex-1 flex-row gap-2 items-center text-primary justify-end">
+              <div className="group flex p-3 bg-secondary rounded-full border border-fuchsia-500 cursor-pointer transition-transform duration-75 active:scale-95">
+                <Download size={18} className="group-hover:text-fuchsia-500"/>
+              </div>
+              <div className="group flex p-3 bg-secondary rounded-full border border-fuchsia-500 cursor-pointer transition-transform duration-75 active:scale-95">
+                <Send size={18} className="group-hover:text-fuchsia-500"/>
+              </div>
             </div>
           </CardContent>
         </Card>
