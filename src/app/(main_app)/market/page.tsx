@@ -6,20 +6,20 @@ import { TokenList, type MarketToken } from './components/TokenList';
 import { MarketChart } from './components/MarketChart';
 
 export default function MarketPage() {
-  const [viewingCoin, setViewingCoin] = useState<MarketToken | null>(null);
+  const [viewingToken, setViewingToken] = useState<MarketToken | null>(null);
 
   return (
     <div className="flex flex-col w-full h-full">
       <HeroSection />
-      <div className="flex-1 min-h-0"> 
-        {viewingCoin ? (
+      <div className="flex-1 min-h-0">
+        {viewingToken ? (
           <MarketChart
-            coin={viewingCoin}
-            onBack={() => setViewingCoin(null)}
+            token={viewingToken}
+            onBack={() => setViewingToken(null)}
           />
         ) : (
           <TokenList 
-            onCoinSelect={(coin) => setViewingCoin(coin)} 
+            onTokenSelect={(token) => setViewingToken(token)} 
           />
         )}
       </div>

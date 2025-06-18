@@ -9,9 +9,9 @@ export function TransactionHistory({ className }: { className?: string }) {
   return (
     <Drawer>
       <DrawerTrigger asChild>
-        <Card className="flex w-18 h-18 rounded-3xl">
-            <CardContent className="flex gap-1 items-center">
-              <History className={cn("transition-colors", className)} />
+        <Card className="flex w-18 h-18 items-center justify-center rounded-3xl border-2 border-primary group-hover:border-secondary transition-colors duration-500">
+            <CardContent>
+              <History className={cn("transition-colors duration-500", className)} />
             </CardContent>
         </Card>
       </DrawerTrigger>
@@ -37,23 +37,23 @@ export function TransactionHistory({ className }: { className?: string }) {
                   </Avatar>
                 </div>
                 <div className="flex flex-1 flex-col justify-start gap-1">
-                  <div className="flex flex-1 justify-start">
+                  <div className="flex flex-1 justify-start text-foreground">
                     <h2 className="flex font-bold text-sm">
                       Goki Kato
                     </h2>
                   </div>
-                  <div className="flex flex-1 justify-start">
-                    <h6 className="flex text-xs">
+                  <div className="flex flex-1 justify-start text-primary-foreground">
+                    <h6 className="flex font-semibold text-xs">
                       0X87824783..234212
                     </h6>
                   </div>
                 </div>
               </div>
               <div className="flex flex-col flex-1 gap-1">
-                <div className="flex flex-1 justify-end text-red-500">
+                <div className="flex flex-1 justify-end text-destructive">
                   <Upload size={16}/>
                 </div>
-                <div className="flex flex-1 justify-end">
+                <div className="flex flex-1 justify-end text-foreground">
                   <h2 className="flex font-bold text-xs">
                     $2,33.00
                   </h2>
@@ -71,12 +71,12 @@ export function TransactionHistory({ className }: { className?: string }) {
                   </Avatar>
                 </div>
                 <div className="flex flex-1 flex-col justify-start gap-1">
-                  <div className="flex flex-1 justify-start">
+                  <div className="flex flex-1 justify-start text-foreground">
                     <h2 className="flex font-bold text-sm">
                       Goki Kato
                     </h2>
                   </div>
-                  <div className="flex flex-1 justify-start">
+                  <div className="flex flex-1 justify-start text-primary-foreground">
                     <h6 className="flex font-semibold text-xs">
                       0X87824783..234212
                     </h6>
@@ -84,10 +84,10 @@ export function TransactionHistory({ className }: { className?: string }) {
                 </div>
               </div>
               <div className="flex flex-col flex-1 gap-1">
-                <div className="flex flex-1 justify-end text-green-400">
+                <div className="flex flex-1 justify-end text-success">
                   <Download size={16} />
                 </div>
-                <div className="flex flex-1 justify-end">
+                <div className="flex flex-1 justify-end text-foreground">
                   <h2 className="flex font-bold text-xs">
                     $2,33.00
                   </h2>

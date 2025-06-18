@@ -10,13 +10,18 @@ const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
 type CoinInfo = { id: string; symbol: string; name: string; };
 type TimeRange = { value: string; label: string; days: number; };
-type ChartType = 'candlestick' | 'area' | 'line';
+// Ganti 'bar' dengan 'boxPlot'
+type ChartType = 'candlestick' | 'area' | 'volume' | 'boxPlot'; 
 type ApexCandlestickDataPoint = { x: number; y: [number, number, number, number]; };
 type ApexLineAreaDataPoint = { x: number; y: number; };
+// Tambahkan tipe data untuk Box Plot
+type ApexBoxPlotDataPoint = { x: number; y: [number, number, number, number, number]; };
 type CoinGeckoOhlcPoint = [number, number, number, number, number];
+type CoinGeckoMarketChartResponse = { prices: [number, number][]; market_caps: [number, number][]; total_volumes: [number, number][]; };
 type ChartSeries = {
   name?: string;
-  data: ApexCandlestickDataPoint[] | ApexLineAreaDataPoint[];
+  // Tambahkan tipe data Box Plot ke Union Type
+  data: ApexCandlestickDataPoint[] | ApexLineAreaDataPoint[] | ApexBoxPlotDataPoint[];
 };
 
 const timeRanges: TimeRange[] = [
@@ -26,90 +31,128 @@ const timeRanges: TimeRange[] = [
 ];
 
 interface MarketChartProps {
-  coin: CoinInfo;
+  token: CoinInfo;
   onBack: () => void;
 }
 
-export function MarketChart({ coin, onBack }: MarketChartProps) {
+export function MarketChart({ token, onBack }: MarketChartProps) {
   const [selectedTimeRange, setSelectedTimeRange] = useState<TimeRange>(timeRanges[2]);
   const [chartType, setChartType] = useState<ChartType>('candlestick');
   const [isLoading, setIsLoading] = useState(true);
   const [ohlcData, setOhlcData] = useState<ApexCandlestickDataPoint[]>([]);
+  const [volumeData, setVolumeData] = useState<ApexLineAreaDataPoint[]>([]);
   const [series, setSeries] = useState<ChartSeries[]>([{ data: [] }]);
   const [options, setOptions] = useState<ApexOptions>({});
 
   useEffect(() => {
-    if (!coin) return;
+    if (!token) return;
     setIsLoading(true);
     const fetchData = async () => {
       const apiKey = process.env.NEXT_PUBLIC_COINGECKO_API_KEY;
-      const apiUrl = `https://api.coingecko.com/api/v3/coins/${coin.id}/ohlc?vs_currency=usd&days=${selectedTimeRange.days}${apiKey ? `&x_cg_demo_api_key=${apiKey}` : ''}`;
+      const ohlcUrl = `https://api.coingecko.com/api/v3/coins/${token.id}/ohlc?vs_currency=usd&days=${selectedTimeRange.days}${apiKey ? `&x_cg_demo_api_key=${apiKey}` : ''}`;
+      const volumeUrl = `https://api.coingecko.com/api/v3/coins/${token.id}/market_chart?vs_currency=usd&days=${selectedTimeRange.days}&interval=daily${apiKey ? `&x_cg_demo_api_key=${apiKey}` : ''}`;
+
       try {
-        const response = await fetch(apiUrl);
-        if (!response.ok) throw new Error(`API returned status ${response.status}: ${response.statusText}`);
-        const data: CoinGeckoOhlcPoint[] = await response.json();
-        if (!Array.isArray(data)) throw new Error("Data received is not an array.");
-        const formattedData: ApexCandlestickDataPoint[] = data.map((d) => ({ x: d[0], y: [d[1], d[2], d[3], d[4]] }));
-        setOhlcData(formattedData);
-      } catch (error) { console.error("Failed to fetch chart data:", error); setOhlcData([]); }
+        const [ohlcResponse, volumeResponse] = await Promise.all([ fetch(ohlcUrl), fetch(volumeUrl) ]);
+        if (!ohlcResponse.ok) throw new Error(`API returned status ${ohlcResponse.status} for OHLC data`);
+        if (!volumeResponse.ok) throw new Error(`API returned status ${volumeResponse.status} for Volume data`);
+        const ohlcJson: CoinGeckoOhlcPoint[] = await ohlcResponse.json();
+        const volumeJson: CoinGeckoMarketChartResponse = await volumeResponse.json();
+        if (!Array.isArray(ohlcJson)) throw new Error("OHLC data is not an array.");
+        if (!volumeJson.total_volumes || !Array.isArray(volumeJson.total_volumes)) throw new Error("Volume data is not an array.");
+
+        const formattedOhlc: ApexCandlestickDataPoint[] = ohlcJson.map((d) => ({ x: d[0], y: [d[1], d[2], d[3], d[4]] }));
+        const formattedVolume: ApexLineAreaDataPoint[] = volumeJson.total_volumes.map((d: [number, number]) => ({ x: d[0], y: d[1] }));
+        
+        setOhlcData(formattedOhlc);
+        setVolumeData(formattedVolume);
+      } catch (error) { console.error("Failed to fetch chart data:", error); setOhlcData([]); setVolumeData([]); }
       finally { setIsLoading(false); }
     };
     fetchData();
-  }, [coin, selectedTimeRange]);
+  }, [token, selectedTimeRange]);
 
   useEffect(() => {
-    if (chartType === 'candlestick') {
-      setSeries([{ name: 'Price', data: ohlcData }]);
-    } else {
-      const lineAreaData: ApexLineAreaDataPoint[] = ohlcData.map(d => ({ x: d.x, y: d.y[3] }));
-      setSeries([{ name: 'Price', data: lineAreaData }]);
+    if (chartType === 'candlestick') { setSeries([{ name: 'Price', data: ohlcData }]);
+    } else if (chartType === 'volume') { setSeries([{ name: 'Volume', data: volumeData }]);
+    } else if (chartType === 'boxPlot') { // Tambahkan logika untuk format data Box Plot
+      const boxPlotData: ApexBoxPlotDataPoint[] = ohlcData.map(d => ({
+        x: d.x,
+        y: [d.y[2], d.y[0], d.y[3], d.y[3], d.y[1]] // mapping: [low, open, close, close, high]
+      }));
+      setSeries([{ name: 'Price Distribution', data: boxPlotData }]);
+    } else { // Untuk 'area' dan tipe lain yang mungkin (menggunakan harga penutupan)
+        const singleValueData: ApexLineAreaDataPoint[] = ohlcData.map(d => ({ x: d.x, y: d.y[3] })); 
+        setSeries([{ name: 'Price', data: singleValueData }]); 
     }
-  }, [ohlcData, chartType]);
+  }, [ohlcData, volumeData, chartType]);
 
   useEffect(() => {
-    const chartColor = '#d946ef';
+    const chartColor = '#d946ef'; const volumeColor = '#888ea8';
+    
     const plotOptions: ApexPlotOptions = {};
     const fill: ApexFill = {};
-    const stroke: ApexStroke = { curve: 'smooth', width: 2 };
+    const stroke: ApexStroke = {};
+    let yaxis: ApexYAxis | ApexYAxis[] = { tooltip: { enabled: false }, labels: { style: { colors: '#8c8c8c' }, formatter: (value: number) => `$${value.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` } };
+    let colors: string[] = [chartColor];
 
-    if (chartType === 'candlestick') {
-      plotOptions.candlestick = { colors: { upward: '#26a69a', downward: '#ef5350' } };
-      fill.type = 'solid';
-    } else {
-      stroke.colors = [chartColor];
-      fill.type = 'gradient';
-      fill.gradient = { type: 'vertical', shadeIntensity: 0.5, opacityFrom: 0.7, opacityTo: 0.2, stops: [0, 100], colorStops: [{ offset: 0, color: chartColor, opacity: 0.5 }, { offset: 100, color: '#FFFFFF', opacity: 0 }] };
+    const chartTypeValue: ChartType | 'bar' = chartType === 'volume' ? 'bar' : chartType;
+
+    if (chartType === 'candlestick') { 
+        plotOptions.candlestick = { colors: { upward: '#26a69a', downward: '#ef5350' } }; 
+        fill.type = 'solid';
+        stroke.width = 1; // Atur stroke untuk candle
+    } else if (chartType === 'volume') { 
+        plotOptions.bar = { horizontal: false, columnWidth: '70%' }; 
+        fill.type = 'solid'; 
+        colors = [volumeColor]; 
+        yaxis = { title: { text: 'Volume' }, labels: { formatter: (value: number) => { if(value > 1_000_000_000) return `${(value/1_000_000_000).toFixed(2)}B`; if(value > 1_000_000) return `${(value/1_000_000).toFixed(2)}M`; if(value > 1_000) return `${(value/1_000).toFixed(2)}K`; return value.toFixed(0); }}};
+    } else if (chartType === 'area') { 
+        stroke.curve = 'smooth';
+        stroke.width = 2;
+        stroke.colors = [chartColor]; 
+        fill.type = 'gradient'; 
+        fill.gradient = { type: 'vertical', shadeIntensity: 0.5, opacityFrom: 0.7, opacityTo: 0.2, stops: [0, 100], colorStops: [{ offset: 0, color: chartColor, opacity: 0.5 }, { offset: 100, color: '#FFFFFF', opacity: 0 }] };
+    } else if (chartType === 'boxPlot') { // Tambahkan logika untuk opsi Box Plot
+        plotOptions.boxPlot = { colors: { upper: '#26a69a', lower: '#ef5350' } };
+        stroke.show = true;
+        stroke.width = 1;
+        stroke.colors = ['#a0a0a0'];
+    } else { // Ini akan berlaku untuk 'line'
+        stroke.curve = 'smooth';
+        stroke.width = 2;
+        stroke.colors = [chartColor]; 
+        fill.type = 'solid'; 
     }
 
     setOptions({
-      chart: { type: chartType, height: 400, background: 'transparent', foreColor: '#f0f0f0', toolbar: { show: true, tools: { download: false, selection: true, zoom: true, zoomin: true, zoomout: true, pan: true } } },
-      colors: [chartColor],
-      title: { text: `${coin?.name || ''} Price (${selectedTimeRange.label})`, align: 'left', style: { color: '#ffffff' } },
-      xaxis: { type: 'datetime', labels: { style: { colors: '#8c8c8c' } } },
-      yaxis: { tooltip: { enabled: false }, labels: { style: { colors: '#8c8c8c' }, formatter: (value: number) => `$${value.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` } },
-      grid: { borderColor: 'rgba(255, 255, 255, 0.1)' },
-      plotOptions: plotOptions, stroke: stroke, fill: fill,
-      tooltip: { enabled: false, },
+      chart: { type: chartTypeValue, height: 400, background: 'transparent', foreColor: '#f0f0f0', toolbar: { show: true, tools: { download: false, selection: true, zoom: true, zoomin: true, zoomout: true, pan: true } } },
+      colors: colors, title: { text: `${token?.name || ''} - ${chartType.charAt(0).toUpperCase() + chartType.slice(1)} (${selectedTimeRange.label})`, align: 'left', style: { color: '#ffffff' } },
+      xaxis: { type: 'datetime', labels: { style: { colors: '#8c8c8c' } } }, yaxis: yaxis, grid: { borderColor: 'rgba(255, 255, 255, 0.1)' },
+      plotOptions: plotOptions, stroke: stroke, fill: fill, tooltip: { enabled: false },
       responsive: [{ breakpoint: 640, options: { yaxis: { show: false }, title: { style: { fontSize: '14px' } } }, }]
     });
-  }, [coin, selectedTimeRange, chartType]);
+  }, [token, selectedTimeRange, chartType, ohlcData, volumeData]); // ohlcData & volumeData dibutuhkan di sini agar series yang baru bisa di-render
 
   return (
     <div className="flex flex-col gap-4 p-4">
       <div className="flex flex-col sm:flex-row gap-4 justify-between">
         <div className="flex items-center gap-2">
-          <Button variant="ghost" size="icon" onClick={onBack}>
-            <ArrowLeft className="w-4 h-4" />
-          </Button>
-          <h2 className="text-xl font-bold">{coin.name} ({coin.symbol.toUpperCase()})</h2>
+          <Button variant="ghost" size="icon" onClick={onBack}><ArrowLeft className="w-4 h-4" /></Button>
+          <h2 className="text-xl font-bold">{token.name} ({token.symbol.toUpperCase()})</h2>
         </div>
         <div className="flex flex-col gap-2">
           <div className="flex gap-1">{timeRanges.map((range) => (<Button key={range.value} variant={selectedTimeRange.value === range.value ? "secondary" : "ghost"} size="sm" onClick={() => setSelectedTimeRange(range)} disabled={isLoading}>{range.label}</Button>))}</div>
-          <div className="flex gap-1"><Button variant={chartType === 'candlestick' ? 'secondary' : 'ghost'} size="sm" onClick={() => setChartType('candlestick')} disabled={isLoading}>Candle</Button><Button variant={chartType === 'line' ? 'secondary' : 'ghost'} size="sm" onClick={() => setChartType('line')} disabled={isLoading}>Line</Button><Button variant={chartType === 'area' ? 'secondary' : 'ghost'} size="sm" onClick={() => setChartType('area')} disabled={isLoading}>Area</Button></div>
+          <div className="flex gap-1">
+            <Button variant={chartType === 'candlestick' ? 'secondary' : 'ghost'} size="sm" onClick={() => setChartType('candlestick')} disabled={isLoading}>Candle</Button>
+            <Button variant={chartType === 'area' ? 'secondary' : 'ghost'} size="sm" onClick={() => setChartType('area')} disabled={isLoading}>Area</Button>
+            <Button variant={chartType === 'volume' ? 'secondary' : 'ghost'} size="sm" onClick={() => setChartType('volume')} disabled={isLoading}>Volume</Button>
+            <Button variant={chartType === 'boxPlot' ? 'secondary' : 'ghost'} size="sm" onClick={() => setChartType('boxPlot')} disabled={isLoading}>Plot</Button>
+          </div>
         </div>
       </div>
       <div id="chart" className="w-full h-[400px] relative">
-        {isLoading ? (<div className="absolute inset-0 flex items-center justify-center bg-card/50 backdrop-blur-sm"><span>Loading Chart...</span></div>) : (<Chart options={options} series={series} type={chartType} height={400} width="100%" />)}
+        {isLoading ? (<div className="absolute inset-0 flex items-center justify-center bg-card/50 backdrop-blur-sm"><span>Loading Chart...</span></div>) : (<Chart options={options} series={series} type={options.chart?.type as 'candlestick' | 'area' | 'boxPlot' | 'bar' | 'line'} height={400} width="100%" />)}
       </div>
     </div>
   );
