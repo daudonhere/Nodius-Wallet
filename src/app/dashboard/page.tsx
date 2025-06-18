@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { HeroSection } from "@/components/main/HeroSection";
-import { TokenList } from "@/components/main/TokenList";
+import { HeroSection } from "@/app/dashboard/components/HeroSection";
+import { TokenList } from "@/app/dashboard/components/TokenList";
 import { BottomNavigation } from "@/components/main/BottomNavigation";
 import { LoadingScreen } from "@/components/loading-screen";
 
