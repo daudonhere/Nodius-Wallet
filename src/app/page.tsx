@@ -1,45 +1,45 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { HeroSection } from "@/components/main/HeroSection";
-import { TokenList } from "@/components/main/TokenList";
-import { BottomNavigation } from "@/components/main/BottomNavigation";
-import { SplashScreen } from "@/components/splash-screen";
+import React, { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import Image from 'next/image';
+import { cn } from "@/libs/utils";
+import { Button } from '@/components/ui/button';
 
-export default function Home() {
-  const [showSplash, setShowSplash] = useState(true);
-  const [fadeSplash, setFadeSplash] = useState(false);
+interface SplashScreenProps {
+  className?: string;
+}
+
+export default function Home({ className }: SplashScreenProps) {
+  const router = useRouter();
 
   useEffect(() => {
-    const fadeOutTimer = setTimeout(() => {
-      setFadeSplash(true);
-    }, 3000);
-
-    
-    const hideSplashTimer = setTimeout(() => {
-      setShowSplash(false);
-    }, 3000);
-
-    return () => {
-      clearTimeout(fadeOutTimer);
-      clearTimeout(hideSplashTimer);
-    };
-  }, []);
+    const timer = setTimeout(() => {
+      router.push('/dashboard');
+    }, 3000); 
+    return () => clearTimeout(timer);
+  }, [router]);
 
   return (
-    <div className="relative flex flex-col w-full h-screen">
-      {showSplash && (
-        <SplashScreen className={fadeSplash ? "fade-out" : ""} />
-      )}
-      {!showSplash && (
-        <div className="flex flex-col w-full h-screen content-fade-in">
-          <div className="flex flex-1 w-full">
-            <HeroSection />
-          </div>
-          <TokenList />
-          <BottomNavigation />
-        </div>
-      )}
+    <div className={cn("flex flex-col items-center justify-center w-full h-screen bg-background text-white animate-fadeIn", className)}>
+      <div className="flex flex-col items-center justify-center gap-y-6 text-center">
+        <Image
+          src="/animation/loading-wallet.gif"
+          alt="Loading Wallet Animation"
+          width={200}
+          height={200}
+          unoptimized={true}
+        />
+        <h1 className="text-2xl font-bold">
+          Nodius Walet
+        </h1>
+        <p className="text-sm text-gray-200 max-w-xs px-4">
+         If you are not redirected automatically, click the button below.
+        </p>
+        <Button className="bg-gradient-to-br from-blue-900 via-purple-800 to-fuchsia-700 text-white">
+          Connect
+        </Button>
+      </div>
     </div>
   );
 }
