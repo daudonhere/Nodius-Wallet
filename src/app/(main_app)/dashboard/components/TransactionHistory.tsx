@@ -35,7 +35,7 @@ export function TransactionHistory({ className }: { className?: string }) {
             <CardContent className="flex flex-row flex-1 gap-1 py-1 px-4">
               <div className="flex flex-row flex-1 items-center gap-2">
                 <div className="flex justify-start items-center">
-                  <Avatar className="w-11 h-11 border-2">
+                  <Avatar className="w-11 h-11 border-2 border-primary">
                       <AvatarImage src="https://github.com/shadcn.png" />
                       <AvatarFallback>RR</AvatarFallback>
                   </Avatar>
@@ -73,7 +73,7 @@ export function TransactionHistory({ className }: { className?: string }) {
             <CardContent className="flex flex-row flex-1 gap-1 py-1 px-4">
               <div className="flex flex-row flex-1 items-center gap-2">
                 <div className="flex justify-start items-center">
-                  <Avatar className="w-11 h-11 border-2">
+                  <Avatar className="w-11 h-11 border-2 border-primary">
                       <AvatarImage src="https://github.com/shadcn.png" />
                       <AvatarFallback>RR</AvatarFallback>
                   </Avatar>
