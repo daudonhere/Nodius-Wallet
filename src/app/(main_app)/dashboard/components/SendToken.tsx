@@ -10,7 +10,7 @@ export function SendToken({ className }: { className?: string }) {
   return (
     <Drawer>
       <DrawerTrigger asChild>
-        <Card className="flex w-18 h-18 items-center justify-center rounded-3xl border-2 border-primary group-hover:border-secondary transition-colors duration-500">
+        <Card className="flex w-18 h-18 items-center justify-center rounded-3xl border-2 border-secondary group-hover:border-primary transition-colors duration-500">
             <CardContent>
               <Send className={cn("text-foreground transition-colors duration-500", className)} />
             </CardContent>
@@ -30,7 +30,7 @@ export function SendToken({ className }: { className?: string }) {
         <div className="flex flex-row justify-center px-4 w-full">
             <Button
               className="flex w-full"
-              variant="outline"
+              variant="default"
             >
               Scan
             </Button>
@@ -41,7 +41,11 @@ export function SendToken({ className }: { className?: string }) {
           </h2>
         </div>
         <div className="flex flex-col gap-3 py-1 px-4 w-full h-[75%] overflow-y-scroll no-scrollbar">
-          <Card className="flex w-full h-16 justify-center">
+          <Card className="flex w-full h-16 justify-center"
+            style={{
+              boxShadow: '0 20px 20px -22px rgba(61, 62, 213, 0.8)'
+            }}
+          >
             <CardContent className="flex flex-row flex-1 gap-1 py-1 px-4">
               <div className="flex flex-row flex-1 items-center gap-2">
                 <div className="flex justify-start items-center">
@@ -56,14 +60,14 @@ export function SendToken({ className }: { className?: string }) {
                       Goki Kato
                     </h2>
                   </div>
-                  <div className="flex flex-1 justify-start text-primary-foreground">
+                  <div className="flex flex-1 justify-start text-secondary-foreground">
                     <h6 className="flex text-xs font-semibold">
                       0X87824783..234212
                     </h6>
                   </div>
                 </div>
               </div>
-              <div className="flex flex-1 items-center text-secondary justify-end">
+              <div className="flex flex-1 items-center text-primary justify-end">
                 <Star />
               </div>
             </CardContent>

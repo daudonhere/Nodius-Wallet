@@ -21,7 +21,7 @@ export default function Home({ className }: SplashScreenProps) {
   }, [router]);
 
   return (
-    <div className={cn("flex flex-col items-center justify-center w-full h-screen bg-background text-white animate-fadeIn", className)}>
+    <div className={cn("flex flex-col items-center justify-center w-full h-screen bg-background text-foreground animate-fadeIn", className)}>
       <div className="flex flex-col items-center justify-center gap-y-6 text-center">
         <Image
           src="/animation/loading-wallet.gif"
@@ -33,10 +33,10 @@ export default function Home({ className }: SplashScreenProps) {
         <h1 className="text-2xl font-bold">
           Nodius Walet
         </h1>
-        <p className="text-sm text-gray-200 max-w-xs px-4">
+        <p className="text-sm text-secondary-foreground max-w-xs px-4">
          If you are not redirected automatically, click the button below.
         </p>
-        <Button className="bg-gradient-to-br from-blue-900 via-purple-800 to-fuchsia-700 text-white">
+        <Button className="bg-gradient-to-br from-tersiery via-secondary to-primary text-secondary-foreground">
           Connect
         </Button>
       </div>

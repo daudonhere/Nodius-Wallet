@@ -29,9 +29,9 @@ export function HeroSection() {
         </div>
         
         <div className="flex h-[50%] flex-row gap-1 mb-4 w-full">
-          <div className="flex flex-1 flex-col gap-2 justify-center text-foreground">
+          <div className="flex flex-1 flex-col gap-2 justify-center">
             <div className="flex flex-row">
-              <div className="flex flex-1 items-center gap-2">
+              <div className="flex flex-1 items-center gap-2 text-secondary-foreground">
                 <h6 className="flex font-base text-xs sm:text-sm md:text-base">
                   0X725212......68876
                 </h6>
@@ -39,13 +39,13 @@ export function HeroSection() {
               </div>
             </div>
             <div className="flex flex-row gap-2 items-center">
-              <div className="flex flex-1 items-center">
+              <div className="flex flex-1 items-center text-foreground">
                 <h2 className="flex font-bold text-4xl sm:text-5xl md:text-6xl lg:text-7xl">
                   $8,876.00
                 </h2>
               </div>
               <div className="flex flex-1 justify-end">
-                <Badge variant="secondary" className="h-6 px-2 text-xs md:h-7 md:px-3 md:text-sm">
+                <Badge variant="danger" className="h-6 px-2 text-xs md:h-7 md:px-3 md:text-sm">
                   -2%
                 </Badge>
               </div>

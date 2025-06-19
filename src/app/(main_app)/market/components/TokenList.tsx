@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Input } from '@/components/ui/input';
+import { Badge } from "@/components/ui/badge";
 import { Skeleton } from '@/components/ui/skeleton';
 import { useInView } from 'react-intersection-observer';
 
@@ -76,12 +77,11 @@ export function TokenList({ onTokenSelect }: TokenListProps) {
   }, [searchTerm, tokens]);
 
   return (
-    <div className="p-4 flex flex-col gap-4 h-full">
+    <div className="p-4 mt-2 flex flex-col gap-4 h-full">
       <Input
-        placeholder="Cari Token..."
+        placeholder="Search Token..."
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
-        className="bg-card border-border"
       />
       <div className="flex-1 overflow-y-auto no-scrollbar">
         {(isLoading && page === 1) ? (
@@ -93,18 +93,28 @@ export function TokenList({ onTokenSelect }: TokenListProps) {
             {filteredTokens.map((token) => (
               <Card
                 key={token.id}
-                className="flex w-full h-16 justify-center cursor-pointer hover:bg-white/5 transition-colors"
+                className="flex w-full h-16 justify-center cursor-pointer hover:bg-mutted/5 transition-colors"
+                style={{
+                  boxShadow: '0 20px 20px -22px rgba(61, 62, 213, 0.8)'
+                }}
                 onClick={() => onTokenSelect(token)}
               >
                 <CardContent className="flex flex-row flex-1 items-center gap-1 py-1 px-4">
-                  <Avatar className="w-10 h-10"><AvatarImage src={token.image} alt={token.name} /><AvatarFallback>{token.symbol.toUpperCase()}</AvatarFallback></Avatar>
+                  <Avatar className="w-10 h-10 border-2 border-primary">
+                    <AvatarImage src={token.image} alt={token.name} />
+                    <AvatarFallback>
+                      {token.symbol.toUpperCase()}
+                    </AvatarFallback>
+                  </Avatar>
                   <div className="flex flex-1 flex-col justify-start items-start gap-1 ml-2 min-w-0">
-                    <h2 className="flex font-bold text-sm">{token.symbol.toUpperCase()}</h2>
-                    <h6 className="flex font-normal text-xs text-gray-400">{truncateName(token.name, 20)}</h6>
+                    <h2 className="flex font-bold text-sm text-foreground">{token.symbol.toUpperCase()}</h2>
+                    <h6 className="flex font-semibold text-xs text-secondary-foreground">{truncateName(token.name, 16)}</h6>
                   </div>
                   <div className="flex flex-col flex-1 gap-1 items-end">
-                    <h2 className="flex font-bold text-sm">${token.current_price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 6 })}</h2>
-                    <h6 className={`flex font-semibold text-xs ${token.price_change_percentage_24h >= 0 ? 'text-green-500' : 'text-red-500'}`}>{token.price_change_percentage_24h.toFixed(2)}%</h6>
+                    <h2 className="flex font-bold text-sm text-foreground">${token.current_price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 6 })}</h2>
+                    <Badge variant={`${token.price_change_percentage_24h >= 0 ? 'success' : 'danger'}`} className="h-5 px-2 text-xs md:h-6 md:px-3 md:text-sm">
+                      {token.price_change_percentage_24h.toFixed(2)}%
+                    </Badge>
                   </div>
                 </CardContent>
               </Card>
@@ -112,11 +122,12 @@ export function TokenList({ onTokenSelect }: TokenListProps) {
           </div>
         )}
         <div ref={ref} className="h-1" />
-        {isLoading && page > 1 && (
-          <div className="flex justify-center p-4">
-            <div className="w-8 h-8 border-4 border-dashed rounded-full animate-spin border-gray-500"></div>
-          </div>
-        )}
+          {isLoading && page > 1 && (
+            <div className="flex justify-center p-4">
+              <div className="w-8 h-8 border-4 border-dashed rounded-full animate-spin border-mutted"></div>
+            </div>
+          )}
+        <div className="flex flex-1 w-full min-h-[25%]"/>
       </div>
     </div>
   );

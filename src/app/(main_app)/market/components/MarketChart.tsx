@@ -10,7 +10,7 @@ const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
 type CoinInfo = { id: string; symbol: string; name: string; };
 type TimeRange = { value: string; label: string; days: number; };
-type ChartType = 'candlestick' | 'area' | 'volume' | 'boxPlot'; 
+type ChartType = 'candlestick' | 'area' | 'volume' | 'boxPlot';
 type ApexCandlestickDataPoint = { x: number; y: [number, number, number, number]; };
 type ApexLineAreaDataPoint = { x: number; y: number; };
 type ApexBoxPlotDataPoint = { x: number; y: [number, number, number, number, number]; };
@@ -50,7 +50,7 @@ export function MarketChart({ token, onBack }: MarketChartProps) {
       const volumeUrl = `https://api.coingecko.com/api/v3/coins/${token.id}/market_chart?vs_currency=usd&days=${selectedTimeRange.days}&interval=daily${apiKey ? `&x_cg_demo_api_key=${apiKey}` : ''}`;
 
       try {
-        const [ohlcResponse, volumeResponse] = await Promise.all([ fetch(ohlcUrl), fetch(volumeUrl) ]);
+        const [ohlcResponse, volumeResponse] = await Promise.all([fetch(ohlcUrl), fetch(volumeUrl)]);
         if (!ohlcResponse.ok) throw new Error(`API returned status ${ohlcResponse.status} for OHLC data`);
         if (!volumeResponse.ok) throw new Error(`API returned status ${volumeResponse.status} for Volume data`);
         const ohlcJson: CoinGeckoOhlcPoint[] = await ohlcResponse.json();
@@ -73,14 +73,11 @@ export function MarketChart({ token, onBack }: MarketChartProps) {
     if (chartType === 'candlestick') { setSeries([{ name: 'Price', data: ohlcData }]);
     } else if (chartType === 'volume') { setSeries([{ name: 'Volume', data: volumeData }]);
     } else if (chartType === 'boxPlot') {
-      const boxPlotData: ApexBoxPlotDataPoint[] = ohlcData.map(d => ({
-        x: d.x,
-        y: [d.y[2], d.y[0], d.y[3], d.y[3], d.y[1]]
-      }));
+      const boxPlotData: ApexBoxPlotDataPoint[] = ohlcData.map(d => ({ x: d.x, y: [d.y[2], d.y[0], d.y[3], d.y[3], d.y[1]] }));
       setSeries([{ name: 'Price Distribution', data: boxPlotData }]);
     } else {
-        const singleValueData: ApexLineAreaDataPoint[] = ohlcData.map(d => ({ x: d.x, y: d.y[3] })); 
-        setSeries([{ name: 'Price', data: singleValueData }]); 
+      const singleValueData: ApexLineAreaDataPoint[] = ohlcData.map(d => ({ x: d.x, y: d.y[3] })); 
+      setSeries([{ name: 'Price', data: singleValueData }]); 
     }
   }, [ohlcData, volumeData, chartType]);
 
@@ -93,7 +90,7 @@ export function MarketChart({ token, onBack }: MarketChartProps) {
     let yaxis: ApexYAxis | ApexYAxis[] = { tooltip: { enabled: false }, labels: { style: { colors: '#8c8c8c' }, formatter: (value: number) => `$${value.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` } };
     let colors: string[] = [chartColor];
 
-    const chartTypeValue: ChartType | 'bar' = chartType === 'volume' ? 'bar' : chartType;
+    const chartTypeValue: 'candlestick' | 'area' | 'volume' | 'boxPlot' | 'bar' = chartType === 'volume' ? 'bar' : chartType;
 
     if (chartType === 'candlestick') { 
         plotOptions.candlestick = { colors: { upward: '#26a69a', downward: '#ef5350' } }; 
@@ -125,42 +122,70 @@ export function MarketChart({ token, onBack }: MarketChartProps) {
     setOptions({
       chart: { type: chartTypeValue, height: 400, background: 'transparent', foreColor: '#f0f0f0', toolbar: { show: true, tools: { download: false, selection: true, zoom: true, zoomin: true, zoomout: true, pan: true } } },
       colors: colors, title: { text: `${token?.name || ''} - ${chartType.charAt(0).toUpperCase() + chartType.slice(1)} (${selectedTimeRange.label})`, align: 'left', style: { color: '#ffffff' } },
-      xaxis: { type: 'datetime', labels: { style: { colors: '#8c8c8c' } } }, yaxis: yaxis, grid: { borderColor: 'rgba(255, 255, 255, 0.1)' },
+      xaxis: { type: 'datetime', labels: { style: { colors: '#8c8c8c' } } }, 
+      yaxis: yaxis, grid: { borderColor: 'rgba(255, 255, 255, 0.1)' },
       plotOptions: plotOptions, stroke: stroke, fill: fill, tooltip: { enabled: false },
-      responsive: [{ breakpoint: 640, options: { yaxis: { show: false }, title: { style: { fontSize: '14px' } } }, }]
+  
+      responsive: [{
+        breakpoint: 640,
+        options: {
+          title: { style: { fontSize: '14px' } },
+          yaxis: {
+            labels: {
+              style: { fontSize: '9px' }
+            }
+          },
+          xaxis: {
+            labels: {
+              rotate: -45,
+                style: { fontSize: '9px' },
+                formatter: function (timestamp: number): string {
+                const date = new Date(timestamp as number);
+                return `${date.getDate()} ${date.toLocaleString('default', { month: 'short' })}`;
+                }
+              },
+              tickAmount: 6,
+          }
+        },
+      }]
     });
   }, [token, selectedTimeRange, chartType, ohlcData, volumeData]);
 
   return (
-    <div className="flex flex-col gap-4 p-4">
+    <div className="flex flex-col gap-4 p-2">
       <div className="flex flex-col sm:flex-row gap-4 justify-between">
         <div className="flex items-center gap-2">
-          <Button variant="ghost" size="icon" onClick={onBack}><ArrowLeft className="w-4 h-4" /></Button>
+          <Button variant="ghost" size="icon" onClick={onBack}>
+            <ArrowLeft className="w-4 h-4" />
+          </Button>
           <h2 className="text-xl font-bold">{token.name} ({token.symbol.toUpperCase()})</h2>
         </div>
-        <div className="flex flex-col gap-2">
-          <div className="flex gap-1">{timeRanges.map((range) => (<Button key={range.value} variant={selectedTimeRange.value === range.value ? "secondary" : "ghost"} size="sm" onClick={() => setSelectedTimeRange(range)} disabled={isLoading}>{range.label}</Button>))}</div>
+        <div className="flex flex-row gap-2">
           <div className="flex gap-1">
-            <Button variant={chartType === 'candlestick' ? 'secondary' : 'ghost'} size="sm" onClick={() => setChartType('candlestick')} disabled={isLoading}>Candle</Button>
-            <Button variant={chartType === 'area' ? 'secondary' : 'ghost'} size="sm" onClick={() => setChartType('area')} disabled={isLoading}>Area</Button>
-            <Button variant={chartType === 'volume' ? 'secondary' : 'ghost'} size="sm" onClick={() => setChartType('volume')} disabled={isLoading}>Volume</Button>
-            <Button variant={chartType === 'boxPlot' ? 'secondary' : 'ghost'} size="sm" onClick={() => setChartType('boxPlot')} disabled={isLoading}>Plot</Button>
+            {timeRanges.map((range) => (<Button key={range.value} variant={selectedTimeRange.value === range.value ? "secondary" : "ghost"} size="sm" onClick={() => setSelectedTimeRange(range)} disabled={isLoading}>{range.label}</Button>))}
           </div>
         </div>
       </div>
-      <div id="chart" className="w-full h-full relative">
+      <div id="chart" className="w-full h-[370px] relative">
         {isLoading ? (
-          <div className="absolute inset-0 flex items-center justify-center bg-card/50 backdrop-blur-sm">
-            <span>Loading Chart...</span>
-          </div>
+          <div className="absolute inset-0 flex items-center justify-center bg-card/50 backdrop-blur-sm"><span>Loading Chart...</span></div>
         ) : (
-          <Chart
-            options={options}
-            series={series}
-            type={options.chart?.type as 'candlestick' | 'area' | 'boxPlot' | 'bar' | 'line'}
-            height={400} width="100%"
-          />
+          (() => {
+            const chartTypeValue: 'candlestick' | 'area' | 'bar' | 'boxPlot' =
+              chartType === 'volume' ? 'bar' : chartType;
+            return (
+              <Chart options={options} series={series} type={chartTypeValue} height="100%" width="100%" />
+            );
+          })()
         )}
+      </div>
+      <div className="flex flex-row px-2 justify-center gap-2">
+        <div className="flex gap-1">
+          <Button variant={chartType === 'candlestick' ? 'secondary' : 'ghost'} size="sm" onClick={() => setChartType('candlestick')} disabled={isLoading}>Candle</Button>
+          <Button variant={chartType === 'area' ? 'secondary' : 'ghost'} size="sm" onClick={() => setChartType('area')} disabled={isLoading}>Area</Button>
+          <Button variant={chartType === 'volume' ? 'secondary' : 'ghost'} size="sm" onClick={() => setChartType('volume')} disabled={isLoading}>Volume</Button>
+          <Button variant={chartType === 'boxPlot' ? 'secondary' : 'ghost'} size="sm" onClick={() => setChartType('boxPlot')} disabled={isLoading}>Plot</Button>
+        </div>
       </div>
     </div>
   );
