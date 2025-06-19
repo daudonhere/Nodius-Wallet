@@ -6,11 +6,8 @@ import Image from 'next/image';
 import { cn } from "@/libs/utils";
 import { Button } from '@/components/ui/button';
 
-interface SplashScreenProps {
-  className?: string;
-}
 
-export default function Home({ className }: SplashScreenProps) {
+export default function Home() {
   const router = useRouter();
 
   useEffect(() => {
@@ -21,7 +18,7 @@ export default function Home({ className }: SplashScreenProps) {
   }, [router]);
 
   return (
-    <div className={cn("flex flex-col items-center justify-center w-full h-screen bg-background text-foreground animate-fadeIn", className)}>
+    <div className={cn("flex flex-col items-center justify-center w-full h-screen bg-background text-foreground animate-fadeIn")}>
       <div className="flex flex-col items-center justify-center gap-y-6 text-center">
         <Image
           src="/animation/loading-wallet.gif"
@@ -31,7 +28,7 @@ export default function Home({ className }: SplashScreenProps) {
           unoptimized={true}
         />
         <h1 className="text-2xl font-bold">
-          Nodius Walet
+          Nodius Wallet
         </h1>
         <p className="text-sm text-secondary-foreground max-w-xs px-4">
          If you are not redirected automatically, click the button below.
