@@ -10,17 +10,14 @@ const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
 type CoinInfo = { id: string; symbol: string; name: string; };
 type TimeRange = { value: string; label: string; days: number; };
-// Ganti 'bar' dengan 'boxPlot'
 type ChartType = 'candlestick' | 'area' | 'volume' | 'boxPlot'; 
 type ApexCandlestickDataPoint = { x: number; y: [number, number, number, number]; };
 type ApexLineAreaDataPoint = { x: number; y: number; };
-// Tambahkan tipe data untuk Box Plot
 type ApexBoxPlotDataPoint = { x: number; y: [number, number, number, number, number]; };
 type CoinGeckoOhlcPoint = [number, number, number, number, number];
 type CoinGeckoMarketChartResponse = { prices: [number, number][]; market_caps: [number, number][]; total_volumes: [number, number][]; };
 type ChartSeries = {
   name?: string;
-  // Tambahkan tipe data Box Plot ke Union Type
   data: ApexCandlestickDataPoint[] | ApexLineAreaDataPoint[] | ApexBoxPlotDataPoint[];
 };
 
@@ -75,13 +72,13 @@ export function MarketChart({ token, onBack }: MarketChartProps) {
   useEffect(() => {
     if (chartType === 'candlestick') { setSeries([{ name: 'Price', data: ohlcData }]);
     } else if (chartType === 'volume') { setSeries([{ name: 'Volume', data: volumeData }]);
-    } else if (chartType === 'boxPlot') { // Tambahkan logika untuk format data Box Plot
+    } else if (chartType === 'boxPlot') {
       const boxPlotData: ApexBoxPlotDataPoint[] = ohlcData.map(d => ({
         x: d.x,
-        y: [d.y[2], d.y[0], d.y[3], d.y[3], d.y[1]] // mapping: [low, open, close, close, high]
+        y: [d.y[2], d.y[0], d.y[3], d.y[3], d.y[1]]
       }));
       setSeries([{ name: 'Price Distribution', data: boxPlotData }]);
-    } else { // Untuk 'area' dan tipe lain yang mungkin (menggunakan harga penutupan)
+    } else {
         const singleValueData: ApexLineAreaDataPoint[] = ohlcData.map(d => ({ x: d.x, y: d.y[3] })); 
         setSeries([{ name: 'Price', data: singleValueData }]); 
     }
@@ -101,7 +98,7 @@ export function MarketChart({ token, onBack }: MarketChartProps) {
     if (chartType === 'candlestick') { 
         plotOptions.candlestick = { colors: { upward: '#26a69a', downward: '#ef5350' } }; 
         fill.type = 'solid';
-        stroke.width = 1; // Atur stroke untuk candle
+        stroke.width = 1;
     } else if (chartType === 'volume') { 
         plotOptions.bar = { horizontal: false, columnWidth: '70%' }; 
         fill.type = 'solid'; 
@@ -113,12 +110,12 @@ export function MarketChart({ token, onBack }: MarketChartProps) {
         stroke.colors = [chartColor]; 
         fill.type = 'gradient'; 
         fill.gradient = { type: 'vertical', shadeIntensity: 0.5, opacityFrom: 0.7, opacityTo: 0.2, stops: [0, 100], colorStops: [{ offset: 0, color: chartColor, opacity: 0.5 }, { offset: 100, color: '#FFFFFF', opacity: 0 }] };
-    } else if (chartType === 'boxPlot') { // Tambahkan logika untuk opsi Box Plot
+    } else if (chartType === 'boxPlot') {
         plotOptions.boxPlot = { colors: { upper: '#26a69a', lower: '#ef5350' } };
         stroke.show = true;
         stroke.width = 1;
         stroke.colors = ['#a0a0a0'];
-    } else { // Ini akan berlaku untuk 'line'
+    } else {
         stroke.curve = 'smooth';
         stroke.width = 2;
         stroke.colors = [chartColor]; 
@@ -132,7 +129,7 @@ export function MarketChart({ token, onBack }: MarketChartProps) {
       plotOptions: plotOptions, stroke: stroke, fill: fill, tooltip: { enabled: false },
       responsive: [{ breakpoint: 640, options: { yaxis: { show: false }, title: { style: { fontSize: '14px' } } }, }]
     });
-  }, [token, selectedTimeRange, chartType, ohlcData, volumeData]); // ohlcData & volumeData dibutuhkan di sini agar series yang baru bisa di-render
+  }, [token, selectedTimeRange, chartType, ohlcData, volumeData]);
 
   return (
     <div className="flex flex-col gap-4 p-4">
@@ -151,8 +148,19 @@ export function MarketChart({ token, onBack }: MarketChartProps) {
           </div>
         </div>
       </div>
-      <div id="chart" className="w-full h-[400px] relative">
-        {isLoading ? (<div className="absolute inset-0 flex items-center justify-center bg-card/50 backdrop-blur-sm"><span>Loading Chart...</span></div>) : (<Chart options={options} series={series} type={options.chart?.type as 'candlestick' | 'area' | 'boxPlot' | 'bar' | 'line'} height={400} width="100%" />)}
+      <div id="chart" className="w-full h-full relative">
+        {isLoading ? (
+          <div className="absolute inset-0 flex items-center justify-center bg-card/50 backdrop-blur-sm">
+            <span>Loading Chart...</span>
+          </div>
+        ) : (
+          <Chart
+            options={options}
+            series={series}
+            type={options.chart?.type as 'candlestick' | 'area' | 'boxPlot' | 'bar' | 'line'}
+            height={400} width="100%"
+          />
+        )}
       </div>
     </div>
   );
