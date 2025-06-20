@@ -23,7 +23,7 @@ export default function RootLayout({
           <link rel="icon" href="/favicon.ico" type="image/x-icon" />
           <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </head>
-      <body>
+      <body className="bg-tersiery">
           <ThemeProvider
             attribute="class"
             defaultTheme="dark"
@@ -31,7 +31,9 @@ export default function RootLayout({
             enableSystem={false}
             disableTransitionOnChange
           >
-            {children}
+            <div className="relative bg-background min-h-screen shadow-2xl mx-auto lg:max-w-xl">
+              {children}
+            </div>
           </ThemeProvider>
       </body>
     </html>

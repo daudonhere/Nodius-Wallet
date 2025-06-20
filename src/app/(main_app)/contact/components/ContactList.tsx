@@ -34,7 +34,7 @@ export function ContactList() {
                   </h2>
                 </div>
                 <div className="flex flex-1 justify-start">
-                  <h6 className="flex text-xs text-secondary-foreground">
+                  <h6 className="flex font-semibold text-xs text-secondary-foreground">
                     0X87824783..234212
                   </h6>
                 </div>
@@ -70,7 +70,7 @@ export function ContactList() {
                   </h2>
                 </div>
                 <div className="flex flex-1 justify-start">
-                  <h6 className="flex text-xs text-secondary-foreground">
+                  <h6 className="flex font-semibold text-xs text-secondary-foreground">
                     0X87824783..234212
                   </h6>
                 </div>

@@ -42,7 +42,7 @@ export function TokenList() {
               </h2>
             </div>
             <div className="flex flex-1 justify-end">
-              <Badge variant="success" className="h-4 px-2 text-xs md:h-6 md:px-3 md:text-sm">
+              <Badge variant="success" className="h-4 px-2 text-xs">
                 -2%
               </Badge>
             </div>

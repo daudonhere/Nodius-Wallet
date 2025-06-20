@@ -153,7 +153,7 @@ export function MarketChart({ token, onBack }: MarketChartProps) {
 
   return (
     <div className="flex flex-col gap-4 p-2">
-      <div className="flex flex-col sm:flex-row gap-4 justify-between">
+      <div className="flex flex-col gap-2 justify-between">
         <div className="flex items-center gap-2">
           <Button variant="ghost" size="icon" onClick={onBack}>
             <ArrowLeft className="w-4 h-4" />

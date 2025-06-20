@@ -16,7 +16,7 @@ export function SendToken({ className }: { className?: string }) {
             </CardContent>
         </Card>
       </DrawerTrigger>
-      <DrawerContent className="flex flex-col gap-2 w-full h-full">
+      <DrawerContent className="flex flex-col gap-2 h-full mx-auto lg:max-w-xl">
         <DrawerHeader>
           <DrawerTitle>Transfer Token</DrawerTitle>
         </DrawerHeader>

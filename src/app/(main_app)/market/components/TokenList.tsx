@@ -112,7 +112,7 @@ export function TokenList({ onTokenSelect }: TokenListProps) {
                   </div>
                   <div className="flex flex-col flex-1 gap-1 items-end">
                     <h2 className="flex font-bold text-sm text-foreground">${token.current_price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 6 })}</h2>
-                    <Badge variant={`${token.price_change_percentage_24h >= 0 ? 'success' : 'danger'}`} className="h-5 px-2 text-xs md:h-6 md:px-3 md:text-sm">
+                    <Badge variant={`${token.price_change_percentage_24h >= 0 ? 'success' : 'danger'}`} className="h-4 px-2 text-xs">
                       {token.price_change_percentage_24h.toFixed(2)}%
                     </Badge>
                   </div>

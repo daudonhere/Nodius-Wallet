@@ -14,7 +14,7 @@ export function ReceiveToken({ className }: { className?: string }) {
             </CardContent>
         </Card>
       </DrawerTrigger>
-      <DrawerContent className="flex flex-1 gap-2 p-2 w-full h-full">
+      <DrawerContent className="flex flex-1 gap-2 p-2 h-full mx-auto lg:max-w-xl">
         <DrawerHeader>
           <DrawerTitle>Receive Token</DrawerTitle>
         </DrawerHeader>
@@ -31,7 +31,7 @@ export function ReceiveToken({ className }: { className?: string }) {
                   </h3>
                 </div>
                 <div className="flex flex-1 flex-row gap-2 items-center">
-                  <h6 className="text-sm font-base text-secondary-foreground">
+                  <h6 className="text-xs font-semibold text-secondary-foreground">
                     0X8732723....897876
                   </h6>
                   <div className="flex flex-1 flex-row gap-2 justify-end">
@@ -75,7 +75,7 @@ export function ReceiveToken({ className }: { className?: string }) {
                   </h3>
                 </div>
                 <div className="flex flex-1 flex-row gap-2 items-center">
-                  <h6 className="text-sm font-base text-secondary-foreground">
+                  <h6 className="text-xs font-semibold text-secondary-foreground">
                     0X8732723....897876
                   </h6>
                   <div className="flex flex-1 flex-row gap-2 justify-end">
@@ -107,7 +107,7 @@ export function ReceiveToken({ className }: { className?: string }) {
                   </h3>
                 </div>
                 <div className="flex flex-1 flex-row gap-2 items-center">
-                  <h6 className="text-sm font-base text-secondary-foreground">
+                  <h6 className="text-xs font-semibold text-secondary-foreground">
                     0X8732723....897876
                   </h6>
                   <div className="flex flex-1 flex-row gap-2 justify-end">
