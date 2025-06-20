@@ -13,15 +13,15 @@ export function HeroSection() {
       background: 'linear-gradient(140deg,rgba(2, 0, 36, 1) 0%, rgba(0, 0, 191, 1) 26%, rgba(242, 0, 255, 1) 100%)',
       boxShadow: '0 1px 20px rgba(61, 62, 213, 0.8)'
     }}>
-      <CardContent className="flex flex-1 flex-col py-2 px-4">
-        <div className="flex h-[30%] flex-row gap-2 text-foreground w-full">
-          <div className="flex w-[20%] items-center">
+      <CardContent className="flex flex-1 flex-col py-2 px-4 md:px-6">
+        <div className="flex h-[30%] flex-row text-foreground w-full gap-2 lg:gap-4">
+          <div className="flex items-center w-[20%] md:w-[8%] lg:w-[10%]">
             <Avatar className="w-14 h-14 border-2 border-primary">
               <AvatarImage src="/token/eth.svg" />
               <AvatarFallback>rr</AvatarFallback>
             </Avatar>
           </div>
-          <div className="flex w-[65%] flex-col gap-2">
+          <div className="flex flex-col gap-2 w-[65%] md:w-[80%] lg:w-[75%]">
             <h2 className="flex font-bold text-xl">
               Hi, Raymond
             </h2>
@@ -38,13 +38,11 @@ export function HeroSection() {
             <LayoutDashboard className="w-6 h-6 cursor-pointer hover:text-primary transition-color duration-500 active:scale-95" />
           </div>
         </div>
-        <div className="flex h-[50%] flex-row gap-2 mb-4 w-full">
-          <div className="flex flex-1 items-center text-foreground">
+        <div className="flex h-[50%] mb-4 w-full">
+          <div className="flex flex-1 flex-row gap-2 items-center text-foreground md:justify-center lg:justify-center md:ml-10 lg:ml-10">
             <h2 className="flex font-bold text-4xl">
               $8,876.00
             </h2>
-          </div>
-          <div className="flex flex-1 items-center justify-start">
             <Badge variant="danger" className="h-4 text-xs font-semibold mb-6">
               -2%
             </Badge>
