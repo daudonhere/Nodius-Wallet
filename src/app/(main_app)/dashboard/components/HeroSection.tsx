@@ -1,12 +1,40 @@
 'use client';
 
+import { useState } from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ActionButton } from "@/app/(main_app)/dashboard/components/ActionButton";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Copy, LayoutDashboard } from "lucide-react";
+import { Copy, Check, LayoutDashboard } from "lucide-react"; 
+import { useUserStore } from '@/stores/userStore';
+
+const truncateAddress = (address: string | undefined): string => {
+  if (!address) return '0x...';
+  if (address.length <= 10) return address;
+
+  const start = address.substring(0, 7);
+  const end = address.substring(address.length - 7);
+  return `${start}.......${end}`;
+};
 
 export function HeroSection() {
+  const { user } = useUserStore();
+  const [isCopied, setIsCopied] = useState(false);
+
+  const handleCopy = () => {
+    if (!user?.wallet?.address) return;
+    navigator.clipboard.writeText(user.wallet.address).then(() => {
+      setIsCopied(true);
+      setTimeout(() => {
+        setIsCopied(false);
+      }, 2000);
+    }).catch(err => {
+      console.error('Failed to copy text: ', err);
+    });
+  };
+  
+  const displayName = user?.google?.name || user?.twitter?.name || 'User';
+  const walletAddress = user?.wallet?.address ?? '';
   
   return (
     <Card className="flex w-full rounded-b-4xl rounded-t-none" style={{
@@ -18,19 +46,25 @@ export function HeroSection() {
           <div className="flex items-center w-[20%] md:w-[8%] lg:w-[10%]">
             <Avatar className="w-14 h-14 border-2 border-primary">
               <AvatarImage src="/token/eth.svg" />
-              <AvatarFallback>rr</AvatarFallback>
+              <AvatarFallback>{displayName.substring(0, 2).toUpperCase()}</AvatarFallback>
             </Avatar>
           </div>
           <div className="flex flex-col gap-2 w-[65%] md:w-[80%] lg:w-[75%]">
             <h2 className="flex font-bold text-xl">
               Hi, Raymond
             </h2>
-            <div className="flex flex-row cursor-pointer group">
+            <div className="flex flex-row cursor-pointer group"
+              onClick={handleCopy}
+            >
               <div className="flex items-center gap-2 text-secondary-foreground">
                 <h6 className="flex font-semibold text-xs">
-                  0x768263....836613
+                 {truncateAddress(walletAddress)}
                 </h6>
-                <Copy className="w-3 h-3 group-hover:text-foreground transition-all" />
+                {isCopied ? (
+                  <Check className="w-3 h-3 text-success transition-all" />
+                ) : (
+                  <Copy className="w-3 h-3 group-hover:text-foreground transition-all" />
+                )}
               </div>
             </div>
           </div>
