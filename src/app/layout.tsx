@@ -1,8 +1,4 @@
-'use client';
-
-import { useEffect } from 'react';
-import { TonConnectUIProvider, useTonWallet } from '@tonconnect/ui-react';
-import { useUserStore } from '@/stores/userStore';
+// 'use client' tidak diperlukan di sini lagi untuk sementara
 import { Roboto } from "next/font/google"; 
 import { ThemeProvider } from "@/components/theme-provider";
 import "@/styles/globals.css";
@@ -12,20 +8,6 @@ const roboto = Roboto({
   weight: ['400', '500', '700'],
   display: 'swap',
 });
-
-const manifestUrl = 'https://nodius-wallet.vercel.app/tonconnect-manifest.json';
-
-function TonWalletSynchronizer() {
-  const wallet = useTonWallet();
-  const { setWallet } = useUserStore();
-
-  useEffect(() => {
-    setWallet(wallet);
-  }, [wallet, setWallet]);
-
-  return null;
-}
-
 
 export default function RootLayout({
   children,
@@ -41,21 +23,17 @@ export default function RootLayout({
           <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </head>
       <body className="bg-tersiery">
-        <TonConnectUIProvider manifestUrl={manifestUrl}>
-          <TonWalletSynchronizer />
-
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="dark"
-            forcedTheme="dark"
-            enableSystem={false}
-            disableTransitionOnChange
-          >
-            <div className="relative bg-background min-h-screen shadow-2xl mx-auto lg:max-w-xl">
-              {children}
-            </div>
-          </ThemeProvider>
-        </TonConnectUIProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          forcedTheme="dark"
+          enableSystem={false}
+          disableTransitionOnChange
+        >
+          <div className="relative bg-background min-h-screen shadow-2xl mx-auto lg:max-w-xl">
+            {children}
+          </div>
+        </ThemeProvider>
       </body>
     </html>
   );
