@@ -1,4 +1,8 @@
-// 'use client' tidak diperlukan di sini lagi untuk sementara
+'use client';
+
+import { useEffect } from 'react';
+import { TonConnectUIProvider, useTonWallet } from '@tonconnect/ui-react';
+import { useUserStore } from '@/stores/userStore';
 import { Roboto } from "next/font/google"; 
 import { ThemeProvider } from "@/components/theme-provider";
 import "@/styles/globals.css";
@@ -8,6 +12,22 @@ const roboto = Roboto({
   weight: ['400', '500', '700'],
   display: 'swap',
 });
+
+const manifestUrl = 'https://your-app-url.com/tonconnect-manifest.json';
+
+// Komponen "jembatan" kecil yang tidak menampilkan UI
+// Tugasnya hanya menyinkronkan state dari hook useTonWallet ke store Zustand kita
+function TonWalletSynchronizer() {
+  const wallet = useTonWallet();
+  const { setWallet } = useUserStore();
+
+  useEffect(() => {
+    setWallet(wallet);
+  }, [wallet, setWallet]);
+
+  return null; // Tidak merender apapun
+}
+
 
 export default function RootLayout({
   children,
@@ -23,17 +43,21 @@ export default function RootLayout({
           <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </head>
       <body className="bg-tersiery">
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="dark"
-          forcedTheme="dark"
-          enableSystem={false}
-          disableTransitionOnChange
-        >
-          <div className="relative bg-background min-h-screen shadow-2xl mx-auto lg:max-w-xl">
-            {children}
-          </div>
-        </ThemeProvider>
+        <TonConnectUIProvider manifestUrl={manifestUrl}>
+          <TonWalletSynchronizer />
+
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="dark"
+            forcedTheme="dark"
+            enableSystem={false}
+            disableTransitionOnChange
+          >
+            <div className="relative bg-background min-h-screen shadow-2xl mx-auto lg:max-w-xl">
+              {children}
+            </div>
+          </ThemeProvider>
+        </TonConnectUIProvider>
       </body>
     </html>
   );
