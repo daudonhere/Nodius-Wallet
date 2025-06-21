@@ -1,34 +1,27 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { cn } from "@/libs/utils";
-import { Button } from '@/components/ui/button';
-import { usePrivy } from '@privy-io/react-auth';
-import { LoaderCircle } from 'lucide-react'; 
+import { TonConnectButton, useTonWallet } from '@tonconnect/ui-react';
 
 export default function Home() {
   const router = useRouter();
-  const { ready, authenticated, login } = usePrivy();
-  const [isRedirecting, setIsRedirecting] = useState(false);
+  const wallet = useTonWallet(); 
 
   useEffect(() => {
-    if (ready && authenticated) {
-      setIsRedirecting(true);
-      router.push('/dashboard');
+    if (wallet) {
+      const timer = setTimeout(() => {
+        router.push('/dashboard');
+      }, 1000);
+      
+      return () => clearTimeout(timer);
     }
-  }, [ready, authenticated, router]);
+  }, [wallet, router]);
 
   return (
     <div className={cn("flex flex-col items-center justify-center w-full h-screen bg-background text-foreground animate-fadeIn")}>
-      {isRedirecting ? (
-        <div className="flex flex-col items-center gap-4">
-          <LoaderCircle className="w-12 h-12 animate-spin text-primary" />
-          <p className="text-secondary-foreground">Login successful!</p>
-          <p className="text-sm text-mutted">Redirecting to your dashboard...</p>
-        </div>
-      ) : (
       <div className="flex flex-col items-center justify-center gap-y-6 text-center">
         <Image
           src="/animation/loading-wallet.gif"
@@ -41,18 +34,13 @@ export default function Home() {
           Nodius Wallet
         </h1>
         <p className="text-sm text-secondary-foreground max-w-xs px-4">
-         If you are not redirected automatically, click the button below.
+          Connect your TON wallet to continue.
         </p>
         
-        <Button 
-            className="bg-gradient-to-br from-tersiery via-secondary to-primary text-secondary-foreground"
-            onClick={login}
-            disabled={!ready || authenticated}
-          >
-            {ready ? 'Connect' : 'Loading...'}
-          </Button>
+        <div className="mt-4">
+          <TonConnectButton />
         </div>
-      )}
+      </div>
     </div>
   );
 }

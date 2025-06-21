@@ -1,9 +1,10 @@
 'use client';
 
+import { useEffect } from 'react';
+import { TonConnectUIProvider, useTonWallet } from '@tonconnect/ui-react';
+import { useUserStore } from '@/stores/userStore';
 import { Roboto } from "next/font/google"; 
 import { ThemeProvider } from "@/components/theme-provider";
-import { PrivyUserSynchronizer } from '@/hooks/PrivyUserSynchronizer'; 
-import { PrivyProvider } from '@privy-io/react-auth';
 import "@/styles/globals.css";
 
 const roboto = Roboto({
@@ -11,6 +12,20 @@ const roboto = Roboto({
   weight: ['400', '500', '700'],
   display: 'swap',
 });
+
+const manifestUrl = 'https://nodius-wallet.vercel.app/tonconnect-manifest.json';
+
+function TonWalletSynchronizer() {
+  const wallet = useTonWallet();
+  const { setWallet } = useUserStore();
+
+  useEffect(() => {
+    setWallet(wallet);
+  }, [wallet, setWallet]);
+
+  return null;
+}
+
 
 export default function RootLayout({
   children,
@@ -26,31 +41,9 @@ export default function RootLayout({
           <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </head>
       <body className="bg-tersiery">
-        <PrivyProvider 
-            appId={process.env.NEXT_PUBLIC_PRIVY_APP_ID || ''}
-            config={{
-              appearance: {
-                accentColor: "#ff00c8",
-                theme: "dark",
-                showWalletLoginFirst: true,
-                logo: "logo.png",
-              },
-              loginMethods: [
-                "wallet",
-                "telegram"
-              ],
-              embeddedWallets: {
-                ethereum: {
-                  createOnLogin: 'users-without-wallets'
-                },
-                solana: {
-                  createOnLogin: 'users-without-wallets'
-                },
-                requireUserPasswordOnCreate: false,
-              },
-          }}
-        >
-          <PrivyUserSynchronizer /> 
+        <TonConnectUIProvider manifestUrl={manifestUrl}>
+          <TonWalletSynchronizer />
+
           <ThemeProvider
             attribute="class"
             defaultTheme="dark"
@@ -62,7 +55,7 @@ export default function RootLayout({
               {children}
             </div>
           </ThemeProvider>
-        </PrivyProvider>
+        </TonConnectUIProvider>
       </body>
     </html>
   );
