@@ -45,7 +45,7 @@ export function MarketChart({ token, onBack }: MarketChartProps) {
     if (!token) return;
     setIsLoading(true);
     const fetchData = async () => {
-      const apiKey = process.env.NEXT_PUBLIC_COINGECKO_API_KEY;
+      const apiKey = process.env.COINGECKO_API_KEY;
       const ohlcUrl = `https://api.coingecko.com/api/v3/coins/${token.id}/ohlc?vs_currency=usd&days=${selectedTimeRange.days}${apiKey ? `&x_cg_demo_api_key=${apiKey}` : ''}`;
       const volumeUrl = `https://api.coingecko.com/api/v3/coins/${token.id}/market_chart?vs_currency=usd&days=${selectedTimeRange.days}&interval=daily${apiKey ? `&x_cg_demo_api_key=${apiKey}` : ''}`;
 

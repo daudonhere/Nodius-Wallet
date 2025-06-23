@@ -1,27 +1,35 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { cn } from "@/libs/utils";
-import { TonConnectButton, useTonWallet } from '@tonconnect/ui-react';
+import { Button } from '@/components/ui/button';
+import { usePrivy, useLogin } from '@privy-io/react-auth';
+import { LoaderCircle } from 'lucide-react'; 
 
 export default function Home() {
   const router = useRouter();
-  const wallet = useTonWallet(); 
+  const { ready, authenticated } = usePrivy();
+  const { login } = useLogin();
+  const [isRedirecting, setIsRedirecting] = useState(false);
 
   useEffect(() => {
-    if (wallet) {
-      const timer = setTimeout(() => {
-        router.push('/dashboard');
-      }, 1000);
-      
-      return () => clearTimeout(timer);
+    if (ready && authenticated) {
+      setIsRedirecting(true);
+      router.push('/dashboard');
     }
-  }, [wallet, router]);
+  }, [ready, authenticated, router]);
 
   return (
     <div className={cn("flex flex-col items-center justify-center w-full h-screen bg-background text-foreground animate-fadeIn")}>
+      {isRedirecting ? (
+        <div className="flex flex-col items-center gap-4">
+          <LoaderCircle className="w-12 h-12 animate-spin text-primary" />
+          <p className="text-secondary-foreground">Login successful!</p>
+          <p className="text-sm text-mutted">Redirecting to your dashboard...</p>
+        </div>
+      ) : (
       <div className="flex flex-col items-center justify-center gap-y-6 text-center">
         <Image
           src="/animation/loading-wallet.gif"
@@ -34,13 +42,18 @@ export default function Home() {
           Nodius Wallet
         </h1>
         <p className="text-sm text-secondary-foreground max-w-xs px-4">
-          Connect your TON wallet to continue.
+         If you are not redirected automatically, click the button below.
         </p>
         
-        <div className="mt-4">
-          <TonConnectButton />
+        <Button 
+            className="bg-gradient-to-br from-tersiery via-secondary to-primary text-secondary-foreground"
+            onClick={login}
+            disabled={!ready || authenticated}
+          >
+            {ready ? 'Connect' : 'Loading...'}
+          </Button>
         </div>
-      </div>
+      )}
     </div>
   );
 }

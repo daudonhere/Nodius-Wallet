@@ -1,16 +1,35 @@
 import { create } from 'zustand';
-import { type Wallet } from '@tonconnect/ui-react';
+import type { User } from "@privy-io/react-auth";
 
-interface TonWalletState {
-  wallet: Wallet | null;
-  setWallet: (wallet: Wallet | null) => void;
+interface UserState {
+  user: User | null;
+  evmAddress: string | null;
+  privKey: string | null;
+  tonAddress: string | null;
+  solanaAddress: string | null;
+
+  setUser: (user: User | null) => void;
+  setWalletData: (data: Partial<Omit<UserState, "user" | "setUser" | "setWalletData" | "clearUser" | "clearWallet">>) => void;
+
+  clearUser: () => void;
   clearWallet: () => void;
 }
 
-export const useUserStore = create<TonWalletState>((set) => ({
-  wallet: null,
-  
-  setWallet: (wallet) => set({ wallet }),
+export const useUserStore = create<UserState>((set) => ({
+  user: null,
+  evmAddress: null,
+  privKey: null,
+  tonAddress: null,
+  solanaAddress: null,
 
-  clearWallet: () => set({ wallet: null }),
+  setUser: (user) => set({ user }),
+  setWalletData: (data) => set((state) => ({ ...state, ...data })),
+  clearUser: () => set({ user: null }),
+  clearWallet: () =>
+    set({
+      evmAddress: null,
+      privKey: null,
+      tonAddress: null,
+      solanaAddress: null,
+    }),
 }));

@@ -91,6 +91,13 @@ body {
   overflow: hidden; 
 }
 
+.scrollbar-track {
+  background: transparent !important;
+}
+
+.scrollbar-thumb {
+  background: transparent !important;
+}
 .no-scrollbar::-webkit-scrollbar {
     display: none;
     width: 0;
