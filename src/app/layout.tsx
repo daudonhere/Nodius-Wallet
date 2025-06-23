@@ -2,8 +2,6 @@
 
 import { Roboto } from "next/font/google"; 
 import { ThemeProvider } from "@/components/theme-provider";
-import { PrivySync } from '@/components/privy-sync';
-import { PrivyProvider } from '@privy-io/react-auth';
 import "@/styles/globals.css";
 
 const roboto = Roboto({
@@ -26,44 +24,17 @@ export default function RootLayout({
           <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </head>
       <body className="bg-tersiery">
-        <PrivyProvider 
-            appId={process.env.NEXT_PUBLIC_PRIVY_APP_ID || ''}
-            config={{
-              appearance: {
-                accentColor: "#ff00c8",
-                theme: "dark",
-                showWalletLoginFirst: false,
-                // logo: "logo.png",
-              },
-              loginMethods: [
-                "google",
-                "telegram",
-                "wallet"
-              ],
-              embeddedWallets: {
-                ethereum: {
-                  createOnLogin: undefined
-                },
-                solana: {
-                  createOnLogin: undefined
-                },
-                requireUserPasswordOnCreate: false,
-              },
-          }}
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          forcedTheme="dark"
+          enableSystem={false}
+          disableTransitionOnChange
         >
-          <PrivySync/>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="dark"
-            forcedTheme="dark"
-            enableSystem={false}
-            disableTransitionOnChange
-          >
-            <div className="relative bg-background min-h-screen shadow-2xl mx-auto lg:max-w-xl">
-              {children}
-            </div>
-          </ThemeProvider>
-        </PrivyProvider>
+          <div className="relative bg-background min-h-screen shadow-2xl mx-auto lg:max-w-xl">
+            {children}
+          </div>
+        </ThemeProvider>
       </body>
     </html>
   );

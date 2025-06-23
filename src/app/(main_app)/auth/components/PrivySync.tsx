@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { usePrivy, useWallets } from '@privy-io/react-auth';
 import { userStore } from '@/stores/userStore';
-import { CreateWallet } from './create-wallet';
+import { CreateWallet } from './CreateWallet';
 
 export function PrivySync() {
   const { user, ready, authenticated } = usePrivy();
