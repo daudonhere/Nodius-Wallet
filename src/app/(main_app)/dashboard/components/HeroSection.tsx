@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { ActionButton } from "./ActionButton";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Copy, Check, LayoutDashboard } from "lucide-react"; 
-import { useUserStore } from '@/stores/userStore';
+import { userStore } from '@/stores/userStore';
 
 const truncateAddress = (address: string | undefined): string => {
   if (!address) return '...';
@@ -17,8 +17,10 @@ const truncateAddress = (address: string | undefined): string => {
 };
 
 export function HeroSection() {
-  const { user, evmAddress } = useUserStore();
+  const { user, evmAddress } = userStore();
   const [isCopied, setIsCopied] = useState(false);
+  console.log(user)
+  console.log(evmAddress)
 
   const handleCopy = () => {
     if (!evmAddress) return;

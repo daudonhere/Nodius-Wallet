@@ -1,28 +1,44 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { usePrivy, useWallets } from '@privy-io/react-auth';
-import { useUserStore } from '@/stores/userStore';
+import { userStore } from '@/stores/userStore';
+import { CreateWallet } from './create-wallet';
 
 export function PrivySync() {
   const { user, ready, authenticated } = usePrivy();
   const { wallets } = useWallets();
-  console.log(wallets)
-  const setUser = useUserStore((s) => s.setUser);
-  const setWalletData = useUserStore((s) => s.setWalletData);
+  const [showCreatePrompt, setShowCreatePrompt] = useState(false);
+  const setUser = userStore((s) => s.setUser);
+  const setWalletData = userStore((s) => s.setWalletData);
+  const clearUser = userStore((s) => s.clearUser);
+  const clearWallet = userStore((s) => s.clearWallet);
 
   useEffect(() => {
-    if (!ready || !authenticated || !user) return;
+    if (!ready) return;
 
-    setUser(user);
+    if (authenticated && user) {
+      setUser(user);
 
-    const embeddedWallet = wallets.find(w => w.walletClientType === 'privy' && w.address);
-    const evmAddress = embeddedWallet?.address || null;
+      const embeddedWallet = wallets.find((w) => w.walletClientType === 'embedded' && !!w.address);
 
-    setWalletData({
-      evmAddress,
-    });
-  }, [ready, authenticated, user, wallets, setUser, setWalletData]);
+      if (embeddedWallet) {
+        setWalletData({
+          evmAddress: embeddedWallet.address,
+        });
+        setShowCreatePrompt(false); 
+      } else {
+        setShowCreatePrompt(true);
+      }
+    } else {
+      clearUser();
+      clearWallet();
+    }
+  }, [user, wallets, ready, authenticated, setUser, setWalletData, clearUser, clearWallet]);
 
-  return null;
+  return (
+    <>
+      {showCreatePrompt && <CreateWallet />}
+    </>
+  );
 }

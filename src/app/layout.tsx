@@ -42,10 +42,10 @@ export default function RootLayout({
               ],
               embeddedWallets: {
                 ethereum: {
-                  createOnLogin: 'users-without-wallets'
+                  createOnLogin: undefined
                 },
                 solana: {
-                  createOnLogin: 'users-without-wallets'
+                  createOnLogin: undefined
                 },
                 requireUserPasswordOnCreate: false,
               },

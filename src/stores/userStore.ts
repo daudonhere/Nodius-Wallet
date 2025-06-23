@@ -15,7 +15,7 @@ interface UserState {
   clearWallet: () => void;
 }
 
-export const useUserStore = create<UserState>((set) => ({
+export const userStore = create<UserState>((set) => ({
   user: null,
   evmAddress: null,
   privKey: null,
@@ -23,8 +23,11 @@ export const useUserStore = create<UserState>((set) => ({
   solanaAddress: null,
 
   setUser: (user) => set({ user }),
+
   setWalletData: (data) => set((state) => ({ ...state, ...data })),
+
   clearUser: () => set({ user: null }),
+
   clearWallet: () =>
     set({
       evmAddress: null,
@@ -33,3 +36,5 @@ export const useUserStore = create<UserState>((set) => ({
       solanaAddress: null,
     }),
 }));
+
+
