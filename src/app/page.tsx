@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { cn } from "@/libs/utils";
@@ -9,21 +9,35 @@ import { LoaderCircle } from 'lucide-react';
 
 export default function Home() {
   const router = useRouter();
-  const { user } = userStore.getState();
+  const user = userStore((state) => state.user);
+  
+  const [statusMessage, setStatusMessage] = useState('Checking your session...');
 
   useEffect(() => {
-    const splashScreenDuration = 2500;
-    const timer = setTimeout(() => {
-      if (user) {
-        console.log("User session found. Redirecting to /dashboard...");
+    const messageDelay = 500;
+    const redirectDelay = 2500;
+
+    const decisionTimer = setTimeout(() => {
+      if (user && user.wallet) {
+        setStatusMessage('Session found! Redirecting to dashboard...');
+      } else {
+        setStatusMessage("Seems like you're not connected, redirecting to login page...");
+      }
+    }, messageDelay);
+
+    const redirectTimer = setTimeout(() => {
+      if (user && user.wallet) {
         router.push('/dashboard');
       } else {
-        console.log("No user session found. Redirecting to /auth...");
         router.push('/auth');
       }
-    }, splashScreenDuration);
-    return () => clearTimeout(timer);
-  }, [router, user]);
+    }, redirectDelay);
+
+    return () => {
+      clearTimeout(decisionTimer);
+      clearTimeout(redirectTimer);
+    };
+  }, [user, router]);
 
   return (
     <div className={cn("flex flex-col items-center justify-center w-full h-screen bg-background text-foreground animate-fadeIn")}>
@@ -36,9 +50,9 @@ export default function Home() {
             unoptimized
           />
           <h1 className="text-2xl font-bold mt-4">Nodius Wallet</h1>
-          <div className="flex items-center gap-2 mt-2 text-mutted">
+          <div className="flex items-center gap-2 mt-2 text-gray-400">
             <LoaderCircle className="w-4 h-4 animate-spin" />
-            <p>Checking your session...</p>
+            <p>{statusMessage}</p>
           </div>
         </div>
     </div>

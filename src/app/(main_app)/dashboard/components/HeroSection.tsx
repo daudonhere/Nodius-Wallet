@@ -9,22 +9,21 @@ import { Copy, Check, LayoutDashboard } from "lucide-react";
 import { userStore } from '@/stores/userStore';
 
 const truncateAddress = (address: string | undefined): string => {
-  if (!address) return '...';
+  if (!address) return '.......';
   if (address.length <= 10) return address;
-  const start = address.substring(0, 5);
-  const end = address.substring(address.length - 5);
+  const start = address.substring(0, 7);
+  const end = address.substring(address.length - 7);
   return `${start}.....${end}`;
 };
 
 export function HeroSection() {
-  const { user, evmAddress } = userStore();
+  const { user } = userStore();
   const [isCopied, setIsCopied] = useState(false);
   console.log(user)
-  console.log(evmAddress)
 
   const handleCopy = () => {
-    if (!evmAddress) return;
-    navigator.clipboard.writeText(evmAddress).then(() => {
+    if (!user?.wallet?.address) return;
+    navigator.clipboard.writeText(user?.wallet?.address).then(() => {
       setIsCopied(true);
       setTimeout(() => { setIsCopied(false); }, 2000);
     }).catch(err => { console.error('Failed to copy text: ', err); });
@@ -52,7 +51,7 @@ export function HeroSection() {
             <div className="flex flex-row cursor-pointer group" onClick={handleCopy}>
               <div className="flex items-center gap-2 text-secondary-foreground">
                 <h6 className="flex font-semibold text-xs truncate">
-                  {truncateAddress(evmAddress || undefined)}
+                  {truncateAddress(user?.wallet?.address || undefined)}
                 </h6>
                 {isCopied ? (
                   <Check className="w-3 h-3 text-green-500 transition-all" />
